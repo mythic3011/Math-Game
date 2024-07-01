@@ -12,7 +12,7 @@ import java.util.List;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "MathGameDB";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static final String TABLE_GAMES = "games";
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_PLAY_DATE = "play_date";
@@ -20,6 +20,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_DURATION = "duration";
     private static final String COLUMN_CORRECT_COUNT = "correct_count";
     private static final String COLUMN_SYNCED = "synced";
+    private static final String COLUMN_NAME = "name";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -33,24 +34,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + COLUMN_PLAY_TIME + " TEXT,"
                 + COLUMN_DURATION + " INTEGER,"
                 + COLUMN_CORRECT_COUNT + " INTEGER,"
-                + COLUMN_SYNCED + " INTEGER DEFAULT 0"
+                + COLUMN_SYNCED + " INTEGER DEFAULT 0,"
+                + COLUMN_NAME + " TEXT"
                 + ")";
         db.execSQL(CREATE_GAMES_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_GAMES);
-        onCreate(db);
+        if (oldVersion < 2) {
+            db.execSQL("ALTER TABLE " + TABLE_GAMES + " ADD COLUMN " + COLUMN_NAME + " TEXT");
+        }
     }
 
-    public long addGameResult(String playDate, String playTime, int duration, int correctCount) {
+    public long addGameResult(String playDate, String playTime, int duration, int correctCount, String name) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_PLAY_DATE, playDate);
         values.put(COLUMN_PLAY_TIME, playTime);
         values.put(COLUMN_DURATION, duration);
         values.put(COLUMN_CORRECT_COUNT, correctCount);
+        values.put(COLUMN_NAME, name);
         long id = db.insert(TABLE_GAMES, null, values);
         db.close();
         return id;
@@ -70,6 +74,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 gameResult.setDuration(cursor.getInt(cursor.getColumnIndex(COLUMN_DURATION)));
                 gameResult.setCorrectCount(cursor.getInt(cursor.getColumnIndex(COLUMN_CORRECT_COUNT)));
                 gameResult.setSynced(cursor.getInt(cursor.getColumnIndex(COLUMN_SYNCED)) == 1);
+                gameResult.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
                 gameResults.add(gameResult);
             } while (cursor.moveToNext());
         }
@@ -91,6 +96,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 gameResult.setPlayTime(cursor.getString(cursor.getColumnIndex(COLUMN_PLAY_TIME)));
                 gameResult.setDuration(cursor.getInt(cursor.getColumnIndex(COLUMN_DURATION)));
                 gameResult.setCorrectCount(cursor.getInt(cursor.getColumnIndex(COLUMN_CORRECT_COUNT)));
+                gameResult.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
                 gameResults.add(gameResult);
             } while (cursor.moveToNext());
         }
@@ -104,6 +110,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(COLUMN_SYNCED, 1);
         db.update(TABLE_GAMES, values, COLUMN_ID + " = ?", new String[]{String.valueOf(id)});
+        db.close();
+    }
+
+    public void deleteAllGameResults() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_GAMES, null, null);
         db.close();
     }
 }

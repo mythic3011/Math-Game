@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F6F6F7"
+    android:background="@color/Cloudflare_background"
     tools:context=".MainActivity">
 
     <TextView
@@ -13,96 +13,50 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Mathematics Game"
-        android:textColor="#F48120"
-        android:textSize="28sp"
+        android:textColor="@color/Cloudflare_primary"
+        android:textSize="32sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/btnGame"
+        android:layout_marginTop="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/btnGame"
+    <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
-        android:background="#F48120"
-        android:text="Start Game"
-        android:textColor="#FFFFFF"
-        app:layout_constraintBottom_toTopOf="@+id/btnHistory"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
-
-    <Button
-        android:id="@+id/btnHistory"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        android:background="#F48120"
-        android:text="History"
-        android:textColor="#FFFFFF"
-        app:layout_constraintBottom_toTopOf="@+id/btnRanking"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnGame" />
-
-    <Button
-        android:id="@+id/btnRanking"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        android:background="#F48120"
-        android:text="Ranking"
-        android:textColor="#FFFFFF"
-        app:layout_constraintBottom_toTopOf="@+id/btnHowToPlay"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnHistory" />
-
-    <Button
-        android:id="@+id/btnHowToPlay"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        android:background="#F48120"
-        android:text="How to Play"
-        android:textColor="#FFFFFF"
-        app:layout_constraintBottom_toTopOf="@+id/btnSettings"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnRanking" />
-
-    <Button
-        android:id="@+id/btnSettings"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        android:background="#F48120"
-        android:text="Settings"
-        android:textColor="#FFFFFF"
-        app:layout_constraintBottom_toTopOf="@+id/btnAbout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnHowToPlay" />
-
-    <Button
-        android:id="@+id/btnAbout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        android:background="#F48120"
-        android:text="About"
-        android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnSettings" />
+        app:layout_constraintTop_toBottomOf="@+id/tvTitle"
+        app:layout_constraintVertical_bias="0.3">
+
+        <Button
+            android:id="@+id/btnGame"
+            style="@style/MainMenuButton"
+            android:text="@string/start_game" />
+
+        <Button
+            android:id="@+id/btnRanking"
+            style="@style/MainMenuButton"
+            android:text="@string/ranking" />
+
+        <Button
+            android:id="@+id/btnHowToPlay"
+            style="@style/MainMenuButton"
+            android:text="@string/how_to_play" />
+
+        <Button
+            android:id="@+id/btnSettings"
+            style="@style/MainMenuButton"
+            android:text="@string/settings" />
+
+        <Button
+            android:id="@+id/btnAbout"
+            style="@style/MainMenuButton"
+            android:text="@string/about" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

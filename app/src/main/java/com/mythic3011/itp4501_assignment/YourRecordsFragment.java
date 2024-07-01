@@ -31,15 +31,17 @@ public class YourRecordsFragment extends Fragment {
         List<Map<String, String>> data = new ArrayList<>();
         for (GameResult result : gameResults) {
             Map<String, String> item = new HashMap<>();
+            item.put("name", result.getName());
             item.put("date", result.getPlayDate() + " " + result.getPlayTime());
-            item.put("score", "Correct: " + result.getCorrectCount() + ", Time: " + result.getDuration() + "s");
+            item.put("score", "Correct: " + result.getCorrectCount() + "/10");
+            item.put("time", "Time: " + result.getDuration() + "s");
             data.add(item);
         }
 
         SimpleAdapter adapter = new SimpleAdapter(getContext(), data,
-                android.R.layout.simple_list_item_2,
-                new String[]{"date", "score"},
-                new int[]{android.R.id.text1, android.R.id.text2});
+                R.layout.item_game_result,
+                new String[]{"name", "date", "score", "time"},
+                new int[]{R.id.tvName, R.id.tvDate, R.id.tvScore, R.id.tvTime});
         listView.setAdapter(adapter);
     }
 }

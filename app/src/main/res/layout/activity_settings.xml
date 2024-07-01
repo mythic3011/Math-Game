@@ -1,10 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/settings"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".SettingsActivity">
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/settings"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/Cloudflare_primary"
+            android:layout_marginBottom="24dp"/>
+
+        <CheckBox
+            android:id="@+id/checkBoxSaveRecords"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save Game Records"
+            android:textColor="@color/Cloudflare_text"
+            android:layout_marginBottom="16dp"/>
+
+        <Button
+            android:id="@+id/btnExportSaves"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Export Game Saves"
+            android:backgroundTint="@color/Cloudflare_primary"
+            android:textColor="@color/Cloudflare_secondary"
+            android:layout_marginBottom="8dp"/>
+
+        <Button
+            android:id="@+id/btnImportSaves"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Import Game Saves"
+            android:backgroundTint="@color/Cloudflare_primary"
+            android:textColor="@color/Cloudflare_secondary"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="App Theme"
+            android:textColor="@color/Cloudflare_text"
+            android:layout_marginBottom="8dp"/>
+
+        <Spinner
+            android:id="@+id/spinnerTheme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Language"
+            android:textColor="@color/Cloudflare_text"
+            android:layout_marginBottom="8dp"/>
+
+        <Spinner
+            android:id="@+id/spinnerLanguage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"/>
+
+    </LinearLayout>
+</ScrollView>

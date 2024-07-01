@@ -7,6 +7,7 @@ public class GameResult {
     private int duration;
     private int correctCount;
     private boolean synced;
+    private String name;
 
     public int getId() {
         return id;
@@ -43,5 +44,14 @@ public class GameResult {
     }
     public void setSynced(boolean synced) {
         this.synced = synced;
+    }
+
+
+    public void setName(String string) {
+        this.name = string;
+    }
+
+    public String getName() {
+        return name;
     }
 }

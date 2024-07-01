@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
         btnAbout = findViewById(R.id.btnAbout);
         btnRanking = findViewById(R.id.btnRanking);
         btnGame = findViewById(R.id.btnGame);
-        btnHistory = findViewById(R.id.btnHistory);
         btnSettings = findViewById(R.id.btnSettings);
 
         // Set click listeners
@@ -47,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
         btnAbout.setOnClickListener(this::about);
         btnRanking.setOnClickListener(this::ranking);
         btnGame.setOnClickListener(this::game);
-        btnHistory.setOnClickListener(this::history);
         btnSettings.setOnClickListener(this::settings);
 
         // Initialize database
@@ -65,12 +63,6 @@ public class MainActivity extends AppCompatActivity {
     // game page
     public void game(View view) {
         Intent intent = new Intent(this, GameActivity.class);
-        startActivity(intent);
-    }
-
-    // history page
-    public void history(View view) {
-        Intent intent = new Intent(this, HistoryActivity.class);
         startActivity(intent);
     }
 

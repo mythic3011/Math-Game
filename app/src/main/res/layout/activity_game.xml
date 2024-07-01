@@ -4,65 +4,127 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@color/Cloudflare_background"
     tools:context=".GameActivity">
 
     <TextView
-        android:id="@+id/tvQuestion"
+        android:id="@+id/tvQuestionNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="24sp"
+        android:textSize="18sp"
+        android:textColor="@color/Cloudflare_text"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="32dp"/>
+        android:layout_marginTop="16dp"
+        android:alpha="0"
+        tools:text="Question 1/10"/>
 
     <TextView
         android:id="@+id/tvTimer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="18sp"
+        android:textColor="@color/Cloudflare_text"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:alpha="0"
+        tools:text="Time: 00:30"/>
+
+    <TextView
+        android:id="@+id/tvQuestion"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        android:textColor="@color/Cloudflare_primary"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/tvQuestionNumber"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="32dp"
+        android:alpha="0"
+        tools:text="23 + 45 = ?"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilAnswer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
         app:layout_constraintTop_toBottomOf="@id/tvQuestion"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"/>
+        android:alpha="0"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-    <EditText
-        android:id="@+id/etAnswer"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etAnswer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:hint="Enter your answer"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnDone"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:inputType="number"
-        app:layout_constraintTop_toBottomOf="@id/tvTimer"
+        android:text="Submit Answer"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/tilAnswer"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"/>
+        android:layout_marginTop="24dp"
+        android:alpha="0"/>
 
-    <Button
-        android:id="@+id/btnDone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Done"
-        app:layout_constraintTop_toBottomOf="@id/etAnswer"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"/>
-
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnNext"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Next"
+        android:text="Next Question"
+        android:textSize="18sp"
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/btnDone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="16dp"
+        android:alpha="0"/>
 
     <TextView
         android:id="@+id/tvResult"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/btnNext"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp"
+        android:alpha="0"
+        tools:text="Correct!"/>
+
+    <TextView
+        android:id="@+id/tvScore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textColor="@color/Cloudflare_text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="16dp"
+        android:alpha="0"
+        tools:text="Score: 5/10"/>
+
+    <Button
+        android:id="@+id/btnBackToMain"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Back to Main"
         android:textSize="18sp"
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/btnNext"
