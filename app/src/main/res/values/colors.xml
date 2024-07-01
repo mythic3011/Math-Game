@@ -6,6 +6,17 @@
     <color name="Cloudflare_secondary">#F6F6F7</color>
     <color name="Cloudflare_background">#F6F6F7</color>
     <color name="Cloudflare_text">#333333</color>
+    <color name="cloudflare_orange">#F48120</color>
+    <color name="cloudflare_dark_orange">#D16A1A</color>
+    <color name="cloudflare_blue">#2C7CB0</color>
+    <color name="cloudflare_dark_blue">#205F86</color>
+
+    <color name="light_background">#F5F5F5</color>
+    <color name="dark_background">#121212</color>
+    <color name="dark_text">#212121</color>
+    <color name="light_text">#FFFFFF</color>
+    <color name="gray_text">#757575</color>
+    <color name="light_gray_text">#BDBDBD</color>
 
     <color name="slate_50">#F8FAFC</color>
     <color name="slate_100">#F1F5F9</color>
