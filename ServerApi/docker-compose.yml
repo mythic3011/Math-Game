@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  web:
+    build: ./app
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    volumes:
+      - ./app:/app
+    ports:
+      - 8999:8000
+    environment:
+      - DATABASE_URL=postgresql://user:password@db:5432/mathgame
+    depends_on:
+      - db
+
+  db:
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./sql:/docker-entrypoint-initdb.d
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=mathgame
+    ports:
+      - 5432:5432
+
+volumes:
+  postgres_data:
