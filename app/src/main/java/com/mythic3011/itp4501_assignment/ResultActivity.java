@@ -78,7 +78,15 @@ public class ResultActivity extends AppCompatActivity {
         }
 
         // TODO: Implement the API call to upload the result to the server
-        // For now, we'll just show a toast message
+        // post it to the fast api server
+        // local server is at http://localhost:8999/sync_game_results
+
+        long resultId = dbHelper.addGameResult(date, time, duration, correctCount, name);
+        if (resultId == -1) {
+            Toast.makeText(this, "Error saving game result", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         Toast.makeText(this, "Result uploaded successfully", Toast.LENGTH_SHORT).show();
         btnUpload.setEnabled(false);
     }
