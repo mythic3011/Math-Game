@@ -1,0 +1,134 @@
+<resources>
+    <string name="app_name">数学ゲーム</string>
+    <string name="back">戻る</string>
+    <string name="first_fragment_label">最初のフラグメント</string>
+    <string name="second_fragment_label">2番目のフラグメント</string>
+    <string name="next">次へ</string>
+    <string name="done">完了</string>
+    <string name="previous">前へ</string>
+    <string name="hello_blank_fragment">こんにちは空のフラグメント</string>
+    <string name="start_game">ゲーム開始</string>
+    <string name="ranking">ランキング</string>
+    <string name="how_to_play">遊び方</string>
+    <string name="settings">設定</string>
+    <string name="about">アプリについて</string>
+    <string name="developer_names">Mythic3011</string>
+    <string name="app_description">これはMythic3011によって開発されたAndroidゲームです。このゲームは数学ゲームです。</string>
+    <string name="app_logo_description">アプリのロゴ</string>
+    <string name="save_success">結果が正常に保存されました！</string>
+    <string name="upload_success">結果が正常にアップロードされました！</string>
+    <string name="loading">読み込み中…</string>
+    <string name="name_required">名前を入力してください</string>
+    <string name="result_format">%3$d秒で%2$d問中%1$d問正解しました。</string>
+    <string name="how_to_play_title">遊び方</string>
+    <string name="import_database">データベースをインポート</string>
+    <string name="import_warning">データベースをインポートすると、現在のデータが上書きされます。続行しますか？</string>
+    <string name="yes">はい</string>
+    <string name="no">いいえ</string>
+    <string name="notifications">通知</string>
+    <string name="sound">サウンド</string>
+    <string name="vibration">振動</string>
+    <string name="export_saves">セーブデータをエクスポート</string>
+    <string name="import_saves">セーブデータをインポート</string>
+    <string name="notifications_enabled">通知が有効になりました</string>
+    <string name="notifications_disabled">通知が無効になりました</string>
+    <string name="sound_enabled">サウンドが有効になりました</string>
+    <string name="sound_disabled">サウンドが無効になりました</string>
+    <string name="vibration_enabled">振動が有効になりました</string>
+    <string name="vibration_disabled">振動が無効になりました</string>
+    <string name="database_not_found">データベースファイルが見つかりません</string>
+    <string name="export_success">データベースのエクスポートに成功しました</string>
+    <string name="export_error">データベースのエクスポート中にエラーが発生しました：%1$s</string>
+    <string name="import_success">データベースのインポートに成功しました</string>
+    <string name="import_error">データベースのインポート中にエラーが発生しました：%1$s</string>
+    <string name="theme">テーマ</string>
+    <string name="language">言語</string>
+    <string name="theme_title">テーマ</string>
+    <string name="language_title">言語</string>
+    <string name="notifications_title">通知を有効にする</string>
+    <string name="sound_title">サウンドを有効にする</string>
+    <string name="vibration_title">振動を有効にする</string>
+    <string name="export_database_title">データベースをエクスポート</string>
+    <string name="export_database_summary">ゲームデータをエクスポートする</string>
+    <string name="import_database_title">データベースをインポート</string>
+    <string name="import_database_summary">以前にエクスポートしたゲームデータをインポートする</string>
+
+    <string-array name="theme_entries">
+        <item>システムデフォルト</item>
+        <item>ライト</item>
+        <item>ダーク</item>
+    </string-array>
+    <string-array name="theme_values">
+        <item>system</item>
+        <item>light</item>
+        <item>dark</item>
+    </string-array>
+    <string-array name="theme_options">
+        <item>システムデフォルト</item>
+        <item>ライト</item>
+        <item>ダーク</item>
+    </string-array>
+    <string-array name="language_options">
+        <item>英語</item>
+        <item>繁体字中国語</item>
+        <item>簡体字中国語</item>
+        <item>日本語</item>
+    </string-array>
+    <string-array name="language_values">
+        <item>en</item>
+        <item>zh-TW</item>
+        <item>zh-CN</item>
+        <item>ja</item>
+    </string-array>
+    <string name="game_settings">ゲーム設定</string>
+    <string name="appearance_settings">外観設定</string>
+    <string name="data_management">データ管理</string>
+    <string name="notifications_summary">ゲーム終了時に通知を送信する</string>
+    <string name="sound_summary">ゲーム終了時にサウンドを再生する</string>
+    <string name="vibration_summary">ゲーム終了時に振動する</string>
+
+    <string name="question_number">問題 %1$d/%2$d</string>
+    <string name="question_format">%1$d %2$s %3$d</string>
+    <string name="addition_question">%1$d + %2$d</string>
+    <string name="subtraction_question">%1$d - %2$d</string>
+    <string name="enter_answer">答えを入力してください</string>
+    <string name="correct">正解！</string>
+    <string name="incorrect">不正解。正解は %1$d です</string>
+    <string name="score">スコア：%1$d/%2$d</string>
+    <string name="time_format">%02d:%02d</string>
+    <string name="game_paused">ゲーム一時停止</string>
+    <string name="continue_game">続ける</string>
+    <string name="end_game">ゲーム終了</string>
+    <string name="game_over">ゲーム終了</string>
+    <string name="final_score">最終スコア：%1$d/%2$d</string>
+    <string name="total_time">合計時間：%1$s</string>
+    <string name="enter_your_answer">答えを入力してください</string>
+
+    <string name="result_message">%2$d秒で10問中%1$d問正解しました。</string>
+    <string name="save_result">結果を保存</string>
+    <string name="upload_result">結果をアップロード</string>
+    <string name="back_to_main">メインメニューに戻る</string>
+    <string name="name_hint">名前を入力</string>
+    <string name="anonymous">匿名</string>
+    <string name="result_saved">ゲーム結果が正常に保存されました</string>
+    <string name="result_save_error">ゲーム結果の保存中にエラーが発生しました</string>
+    <string name="result_uploaded">結果が正常にアップロードされました</string>
+    <string name="result_upload_error">ゲーム結果のアップロード中にエラーが発生しました</string>
+    <string name="result_title">結果</string>
+    <string name="instruction1">1. 10問の数学問題に答える</string>
+    <string name="instruction2">2. 問題には +, -, *, / が含まれます</string>
+    <string name="instruction3">3. 答えを入力して「完了」をタップ</string>
+    <string name="instruction4">4. 速く正確に答えて最高スコアを目指そう！</string>
+
+    <string name="ranking_title">ランキング</string>
+    <string name="game_ranking">ゲームランキング</string>
+    <string name="your_records">あなたのレコード</string>
+
+    <string name="visit_my_github">My Githubに行く</string>
+    <string name="developers">開発者</string>
+    <string name="no_records_found">レコードが見つかりません</string>
+    <string name="no_ranking_data">ランキングデータが見つかりません</string>
+    <string name="refresh">更新</string>
+    <string name="refreshing">ランキングを更新中...</string>
+    <string name="about_message">これはMythic3011によって開発されたAndroidゲームです。</string>
+</resources>

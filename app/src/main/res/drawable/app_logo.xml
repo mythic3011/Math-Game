@@ -1,0 +1,32 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Background shape (rounded square) -->
+    <path
+        android:fillColor="#F38020"
+        android:pathData="M5,2L19,2A3,3 0,0 1,22 5L22,19A3,3 0,0 1,19 22L5,22A3,3 0,0 1,2 19L2,5A3,3 0,0 1,5 2z"/>
+
+    <!-- Math symbols -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M7,11h10v2h-10z"/> <!-- Minus sign -->
+
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M11,7h2v10h-2z"/> <!-- Plus sign (vertical) -->
+
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M6,6 L8,8 M8,6 L6,8"/> <!-- Multiplication sign (x) -->
+
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M16,16h2v2h-2z"/> <!-- Division sign (dot) -->
+
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M18,16h2v2h-2z"/> <!-- Division sign (dot) -->
+</vector>

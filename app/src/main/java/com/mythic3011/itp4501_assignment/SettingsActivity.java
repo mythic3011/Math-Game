@@ -1,21 +1,27 @@
 package com.mythic3011.itp4501_assignment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NavUtils;
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
+import androidx.preference.SwitchPreferenceCompat;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -26,207 +32,318 @@ import java.util.Locale;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    private static final int EXPORT_REQUEST_CODE = 1;
-    private static final int IMPORT_REQUEST_CODE = 2;
-
-    private CheckBox checkBoxSaveRecords;
-    private Button btnExportSaves, btnImportSaves;
-    private Spinner spinnerTheme, spinnerLanguage;
-    private SharedPreferences sharedPreferences;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        sharedPreferences = getSharedPreferences("GameSettings", MODE_PRIVATE);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        checkBoxSaveRecords = findViewById(R.id.checkBoxSaveRecords);
-        btnExportSaves = findViewById(R.id.btnExportSaves);
-        btnImportSaves = findViewById(R.id.btnImportSaves);
-        spinnerTheme = findViewById(R.id.spinnerTheme);
-        spinnerLanguage = findViewById(R.id.spinnerLanguage);
-
-        setupSaveRecordsCheckBox();
-        setupExportButton();
-        setupImportButton();
-        setupThemeSpinner();
-        setupLanguageSpinner();
-    }
-
-    private void setupSaveRecordsCheckBox() {
-        boolean saveRecords = sharedPreferences.getBoolean("SaveRecords", true);
-        checkBoxSaveRecords.setChecked(saveRecords);
-        checkBoxSaveRecords.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean("SaveRecords", isChecked);
-            editor.apply();
-        });
-    }
-
-    private void setupExportButton() {
-        btnExportSaves.setOnClickListener(v -> {
-            Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-            intent.setType("application/octet-stream");
-            intent.putExtra(Intent.EXTRA_TITLE, "game_saves.db");
-            startActivityForResult(intent, EXPORT_REQUEST_CODE);
-        });
-    }
-
-    private void setupImportButton() {
-        btnImportSaves.setOnClickListener(v -> {
-            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-            intent.setType("application/octet-stream");
-            startActivityForResult(intent, IMPORT_REQUEST_CODE);
-        });
-    }
-
-    private void setupThemeSpinner() {
-        if (spinnerTheme == null) {
-            Log.e("SettingsActivity", "Theme spinner is null");
-            return;
+        if (savedInstanceState == null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.settings_container, new SettingsFragment())
+                    .commit();
         }
-
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.themes, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerTheme.setAdapter(adapter);
-
-        String currentTheme = sharedPreferences.getString("Theme", "Default");
-        int position = adapter.getPosition(currentTheme);
-        spinnerTheme.setSelection(position);
-
-        spinnerTheme.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedTheme = parent.getItemAtPosition(position).toString();
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("Theme", selectedTheme);
-                editor.apply();
-                applyTheme(selectedTheme);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-    }
-
-    private void applyTheme(String selectedTheme) {
-        switch (selectedTheme) {
-            case "Dark":
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                break;
-            case "Light":
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                break;
-            default:
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-                break;
-        }
-        recreate();
-    }
-
-    private void applyLanguage(String selectedLanguage) {
-        Locale locale;
-        switch (selectedLanguage) {
-            case "Traditional Chinese":
-                locale = Locale.TRADITIONAL_CHINESE;
-                break;
-            case "Simplified Chinese":
-                locale = Locale.SIMPLIFIED_CHINESE;
-                break;
-            case "Japanese":
-                locale = Locale.JAPANESE;
-                break;
-            default:
-                locale = Locale.ENGLISH;
-                break;
-        }
-        Locale.setDefault(locale);
-        Configuration config = new Configuration();
-        config.setLocale(locale);
-        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
-        recreate();
-    }
-
-
-    private void setupLanguageSpinner() {
-        if (spinnerLanguage == null) {
-            Log.e("SettingsActivity", "Language spinner is null");
-            return;
-        }
-
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.languages, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerLanguage.setAdapter(adapter);
-
-        String currentLanguage = sharedPreferences.getString("Language", "English");
-        int position = adapter.getPosition(currentLanguage);
-        spinnerLanguage.setSelection(position);
-
-        spinnerLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedLanguage = parent.getItemAtPosition(position).toString();
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("Language", selectedLanguage);
-                editor.apply();
-                applyLanguage(selectedLanguage);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            if (requestCode == EXPORT_REQUEST_CODE) {
-                exportDatabase(data.getData());
-            } else if (requestCode == IMPORT_REQUEST_CODE) {
-                importDatabase(data.getData());
+    public boolean onSupportNavigateUp() {
+        // Navigate up to parent activity
+        NavUtils.navigateUpFromSameTask(this);
+        return true;
+    }
+
+
+    public static class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
+        private ActivityResultLauncher<Intent> exportLauncher;
+        private ActivityResultLauncher<Intent> importLauncher;
+        private SharedPreferences sharedPreferences;
+
+        @Override
+        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+            setPreferencesFromResource(R.xml.root_preferences, rootKey);
+
+            sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
+
+            registerLaunchers();
+            setupThemePreference();
+            setupLanguagePreference();
+            setupExportPreference();
+            setupImportPreference();
+            setupThemePreference();
+            setupLanguagePreference();
+            setupNotificationsSwitch();
+            setupSoundSwitch();
+            setupVibrationSwitch();
+        }
+
+        private void registerLaunchers() {
+            exportLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                    result -> {
+                        if (result.getResultCode() == Activity.RESULT_OK) {
+                            Intent data = result.getData();
+                            if (data != null) {
+                                exportDatabase(data.getData());
+                            }
+                        }
+                    });
+
+            importLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                    result -> {
+                        if (result.getResultCode() == Activity.RESULT_OK) {
+                            Intent data = result.getData();
+                            if (data != null) {
+                                importDatabase(data.getData());
+                            }
+                        }
+                    });
+        }
+
+        private void setupThemePreference() {
+            ListPreference themePreference = findPreference("theme");
+            if (themePreference != null) {
+                themePreference.setOnPreferenceChangeListener((preference, newValue) -> {
+                    int theme = Integer.parseInt((String) newValue);
+                    AppCompatDelegate.setDefaultNightMode(theme);
+                    return true;
+                });
             }
         }
-    }
 
-    private void exportDatabase(Uri uri) {
-        try {
-            File dbFile = getDatabasePath("MathGameDB");
-            FileInputStream fis = new FileInputStream(dbFile);
-            FileOutputStream fos = (FileOutputStream) getContentResolver().openOutputStream(uri);
-            FileChannel src = fis.getChannel();
-            FileChannel dst = fos.getChannel();
-            dst.transferFrom(src, 0, src.size());
-            src.close();
-            dst.close();
-            Toast.makeText(this, "Database exported successfully", Toast.LENGTH_SHORT).show();
-        } catch (IOException e) {
-            e.printStackTrace();
-            Toast.makeText(this, "Error exporting database", Toast.LENGTH_SHORT).show();
+        private void setupLanguagePreference() {
+            ListPreference languagePreference = findPreference("language");
+            if (languagePreference != null) {
+                languagePreference.setOnPreferenceChangeListener((preference, newValue) -> {
+                    setLocale((String) newValue);
+                    requireActivity().recreate();
+                    return true;
+                });
+            }
         }
-    }
 
-    private void importDatabase(Uri uri) {
-        try {
-            File dbFile = getDatabasePath("MathGameDB");
-            FileInputStream fis = (FileInputStream) getContentResolver().openInputStream(uri);
-            FileOutputStream fos = new FileOutputStream(dbFile);
-            FileChannel src = fis.getChannel();
-            FileChannel dst = fos.getChannel();
-            dst.transferFrom(src, 0, src.size());
-            src.close();
-            dst.close();
-            Toast.makeText(this, "Database imported successfully", Toast.LENGTH_SHORT).show();
-        } catch (IOException e) {
-            e.printStackTrace();
-            Toast.makeText(this, "Error importing database", Toast.LENGTH_SHORT).show();
+        private void setupExportPreference() {
+            Preference exportPreference = findPreference("export_database");
+            if (exportPreference != null) {
+                exportPreference.setOnPreferenceClickListener(preference -> {
+                    Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+                    intent.setType("application/octet-stream");
+                    intent.putExtra(Intent.EXTRA_TITLE, "game_saves.db");
+                    exportLauncher.launch(intent);
+                    return true;
+                });
+            }
+        }
+
+        private void setupImportPreference() {
+            Preference importPreference = findPreference("import_database");
+            if (importPreference != null) {
+                importPreference.setOnPreferenceClickListener(preference -> {
+                    Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+                    intent.setType("application/octet-stream");
+                    importLauncher.launch(intent);
+                    return true;
+                });
+            }
+        }
+
+        private void setLocale(String languageCode) {
+            Locale locale;
+            if (languageCode.contains("-")) {
+                String[] parts = languageCode.split("-");
+                locale = new Locale(parts[0], parts[1]);
+            } else {
+                locale = new Locale(languageCode);
+            }
+            Locale.setDefault(locale);
+            Configuration config = new Configuration();
+            config.setLocale(locale);
+            requireContext().getResources().updateConfiguration(config, requireContext().getResources().getDisplayMetrics());
+        }
+
+        private void exportDatabase(Uri uri) {
+            try {
+                File dbFile = requireContext().getDatabasePath("MathGameDB");
+                if (!dbFile.exists()) {
+                    showToast(R.string.database_not_found);
+                    return;
+                }
+
+                try (FileInputStream fis = new FileInputStream(dbFile);
+                     FileOutputStream fos = (FileOutputStream) requireContext().getContentResolver().openOutputStream(uri);
+                     FileChannel src = fis.getChannel();
+                     FileChannel dst = fos.getChannel()) {
+
+                    dst.transferFrom(src, 0, src.size());
+                    showToast(R.string.export_success);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                showToast(getString(R.string.export_error, e.getMessage()));
+            }
+        }
+
+        private void importDatabase(Uri uri) {
+            try {
+                File dbFile = requireContext().getDatabasePath("MathGameDB");
+                try (FileInputStream fis = (FileInputStream) requireContext().getContentResolver().openInputStream(uri);
+                     FileOutputStream fos = new FileOutputStream(dbFile);
+                     FileChannel src = fis.getChannel();
+                     FileChannel dst = fos.getChannel()) {
+
+                    dst.transferFrom(src, 0, src.size());
+                    showToast(R.string.import_success);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                showToast(getString(R.string.import_error, e.getMessage()));
+            }
+        }
+
+        private void showToast(int messageResId) {
+            Toast.makeText(requireContext(), messageResId, Toast.LENGTH_SHORT).show();
+        }
+
+        private void showToast(String message) {
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onResume() {
+            super.onResume();
+            getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+        }
+
+        @Override
+        public void onPause() {
+            super.onPause();
+            getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
+        }
+
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            switch (key) {
+                case "theme":
+                    updateTheme(sharedPreferences.getString(key, "system"));
+                    break;
+                case "language":
+                    updateLanguage(sharedPreferences.getString(key, "en"));
+                    break;
+                case "notifications":
+                    updateNotifications(sharedPreferences.getBoolean(key, true));
+                    break;
+                case "sound":
+                    updateSound(sharedPreferences.getBoolean(key, true));
+                    break;
+                case "vibration":
+                    updateVibration(sharedPreferences.getBoolean(key, true));
+                    break;
+            }
+        }
+        private void updateTheme(String theme) {
+            int themeResId;
+            switch (theme) {
+                case "light":
+                    themeResId = R.style.Theme_MathGame_Light;
+                    break;
+                case "dark":
+                    themeResId = R.style.Theme_MathGame_Dark;
+                    break;
+                case "pixel":
+                    themeResId = R.style.Theme_MathGame_Pixel;
+                    break;
+                case "cloudflare":
+                    themeResId = R.style.Theme_MathGame_Cloudflare;
+                    break;
+                case "cloudflare_dark":
+                    themeResId = R.style.Theme_MathGame_CloudflareDark;
+                    break;
+                case "tailwind":
+                    themeResId = R.style.Theme_MathGame_Tailwind;
+                    break;
+                default:
+                    themeResId = R.style.Theme_MathGame;
+                    break;
+            }
+
+            // Apply the selected theme
+            requireActivity().setTheme(themeResId);
+
+            // If the theme is system default, set the appropriate night mode
+            if (theme.equals("system")) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+            } else {
+                // For other themes, we'll use the theme-specific settings
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            }
+
+            // Recreate the activity to apply the new theme
+            requireActivity().recreate();
+        }
+
+        private void updateLanguage(String languageCode) {
+            setLocale(languageCode);
+            requireActivity().recreate();}
+
+        private void updateSound(boolean enabled) {
+            SharedPreferences.Editor editor = getPreferenceManager().getSharedPreferences().edit();
+            editor.putBoolean("sound", enabled).apply();
+            showSettingChangedSnackbar(enabled ? R.string.sound_enabled : R.string.sound_disabled);
+        }
+
+        private void updateNotifications(boolean enabled) {
+            SharedPreferences.Editor editor = getPreferenceManager().getSharedPreferences().edit();
+            editor.putBoolean("notifications", enabled).apply();
+            showSettingChangedSnackbar(enabled ? R.string.notifications_enabled : R.string.notifications_disabled);
+        }
+
+        private void updateVibration(boolean enabled) {
+            SharedPreferences.Editor editor = getPreferenceManager().getSharedPreferences().edit();
+            editor.putBoolean("vibration", enabled).apply();
+            showSettingChangedSnackbar(enabled ? R.string.vibration_enabled : R.string.vibration_disabled);
+        }
+
+        private void setupNotificationsSwitch() {
+            SwitchPreferenceCompat notificationsSwitch = findPreference("notifications");
+            if (notificationsSwitch != null) {
+                notificationsSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
+                    boolean isChecked = (Boolean) newValue;
+                    updateNotifications(isChecked);
+                    return true;
+                });
+            }
+        }
+
+        private void setupSoundSwitch() {
+            SwitchPreferenceCompat soundSwitch = findPreference("sound");
+            if (soundSwitch != null) {
+                soundSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
+                    boolean isChecked = (Boolean) newValue;
+                    updateSound(isChecked);
+                    return true;
+                });
+            }
+        }
+        private void setupVibrationSwitch() {
+            SwitchPreferenceCompat vibrationSwitch = findPreference("vibration");
+            if (vibrationSwitch != null) {
+                vibrationSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
+                    boolean isChecked = (Boolean) newValue;
+                    updateVibration(isChecked);
+                    return true;
+                });
+            }
+        }
+
+        private void showSettingChangedSnackbar(int messageResId) {
+            View rootView = getView();
+            if (rootView != null) {
+                Snackbar.make(rootView, messageResId, Snackbar.LENGTH_SHORT).show();
+            }
         }
     }
 }

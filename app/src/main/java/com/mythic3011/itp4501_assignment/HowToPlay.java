@@ -1,61 +1,127 @@
 package com.mythic3011.itp4501_assignment;
 
-import android.os.Bundle;
-import android.widget.Button;
-
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+
+import java.util.Locale;
 
 public class HowToPlay extends AppCompatActivity {
 
-    private TextView tvInstructions;
+    private TextView tvTitle;
     private Button btnStartGame;
+    private MathIconView mathIconView;
+    private CardView[] instructionCards;
+    private TextView[] instructionTexts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        applyLanguageSetting();
         setContentView(R.layout.activity_how_to_play);
 
-        tvInstructions = findViewById(R.id.tvInstructions);
-        btnStartGame = findViewById(R.id.btnStartGame);
-
+        initViews();
         setInstructions();
+        setupListeners();
+        startAnimations();
+    }
 
-        btnStartGame.setOnClickListener(v -> startGame());
+    private void initViews() {
+        tvTitle = findViewById(R.id.tvTitle);
+        btnStartGame = findViewById(R.id.btnStartGame);
+        mathIconView = findViewById(R.id.mathIconView);
+        instructionCards = new CardView[]{
+                findViewById(R.id.card1),
+                findViewById(R.id.card2),
+                findViewById(R.id.card3),
+                findViewById(R.id.card4)
+        };
+        instructionTexts = new TextView[]{
+                findViewById(R.id.tvCardText1),
+                findViewById(R.id.tvCardText2),
+                findViewById(R.id.tvCardText3),
+                findViewById(R.id.tvCardText4)
+        };
     }
 
     private void setInstructions() {
-        String instructions = "Welcome to the Mathematics Game!\n\n" +
-                "Here's how to play:\n\n" +
-                "1. The game consists of 10 math questions.\n\n" +
-                "2. Each question is randomly generated and includes two operands and one operator.\n\n" +
-                "3. Operands are integers between 1 and 100.\n\n" +
-                "4. Operators can be addition (+), subtraction (-), multiplication (*), or division (/).\n\n" +
-                "5. For division, the result will always be an integer.\n\n" +
-                "6. For subtraction, the result will always be zero or positive.\n\n" +
-                "7. Enter your answer in the provided text box and tap 'Done'.\n\n" +
-                "8. The game will show if your answer is correct or not.\n\n" +
-                "9. Tap 'Next' to move to the next question.\n\n" +
-                "10. The timer starts when you begin the game and stops when you finish all 10 questions.\n\n" +
-                "11. At the end of the game, you'll see your score (number of correct answers) and the time taken.\n\n" +
-                "12. Try to answer correctly and quickly to get the best score!\n\n" +
-                "Good luck and have fun!";
+        String[] instructions = {
+                getString(R.string.instruction1),
+                getString(R.string.instruction2),
+                getString(R.string.instruction3),
+                getString(R.string.instruction4)
+        };
 
-        tvInstructions.setText(instructions);
+        for (int i = 0; i < instructionTexts.length; i++) {
+            instructionTexts[i].setText(instructions[i]);
+        }
+    }
+
+    private void setupListeners() {
+        btnStartGame.setOnClickListener(v -> startGame());
+    }
+
+    private void startAnimations() {
+        // Animate title
+        tvTitle.setAlpha(0f);
+        tvTitle.animate().alpha(1f).setDuration(1000).start();
+
+        // Animate instruction cards
+        for (int i = 0; i < instructionCards.length; i++) {
+            CardView card = instructionCards[i];
+            card.setTranslationX(-1000f);
+            card.setAlpha(0f);
+            card.animate()
+                    .translationX(0f)
+                    .alpha(1f)
+                    .setDuration(500)
+                    .setStartDelay(i * 200L)
+                    .start();
+        }
+
+        // Animate start game button
+        btnStartGame.setAlpha(0f);
+        btnStartGame.animate()
+                .alpha(1f)
+                .setDuration(1000)
+                .setStartDelay(1500)
+                .start();
     }
 
     private void startGame() {
         Intent intent = new Intent(this, GameActivity.class);
         startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         finish();
+    }
+
+    private void applyLanguageSetting() {
+        SharedPreferences sharedPreferences = getSharedPreferences("GameSettings", MODE_PRIVATE);
+        int languagePosition = sharedPreferences.getInt("language", 0);
+        String[] languageCodes = {"en", "zh-TW", "zh-CN", "ja"};
+
+        if (languagePosition < languageCodes.length) {
+            setLocale(languageCodes[languagePosition]);
+        }
+    }
+
+    private void setLocale(String languageCode) {
+        Locale locale;
+        if (languageCode.contains("-")) {
+            String[] parts = languageCode.split("-");
+            locale = new Locale(parts[0], parts[1]);
+        } else {
+            locale = new Locale(languageCode);
+        }
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.setLocale(locale);
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
     }
 }

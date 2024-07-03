@@ -3,23 +3,17 @@ package com.mythic3011.itp4501_assignment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.material.button.MaterialButton;
+import com.google.firebase.FirebaseApp;
+
 public class MainActivity extends AppCompatActivity {
-    // Activity Main
 
-    private Button btnAbout;
-    private Button btnRanking;
-    private Button btnGame;
-    private Button btnHistory;
-    private Button btnSettings;
-
-    // Database
     private DatabaseHelper dbHelper;
 
     @Override
@@ -27,60 +21,60 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Set up edge-to-edge display
+        setupEdgeToEdgeDisplay();
+        initializeButtons();
+        initializeDatabase();
+        initializeFirebase();
+    }
+
+    private void setupEdgeToEdgeDisplay() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+            v.setPadding(
+                    insets.getInsets(WindowInsetsCompat.Type.systemBars()).left,
+                    insets.getInsets(WindowInsetsCompat.Type.systemBars()).top,
+                    insets.getInsets(WindowInsetsCompat.Type.systemBars()).right,
+                    insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom
+            );
+            return WindowInsetsCompat.CONSUMED;
         });
+    }
 
-        // Initialize buttons
-        Button btnHowToPlay = findViewById(R.id.btnHowToPlay);
-        btnAbout = findViewById(R.id.btnAbout);
-        btnRanking = findViewById(R.id.btnRanking);
-        btnGame = findViewById(R.id.btnGame);
-        btnSettings = findViewById(R.id.btnSettings);
+    private void initializeButtons() {
+        setupButton(R.id.btnHowToPlay, HowToPlay.class);
+        setupButton(R.id.btnAbout, AboutActivity.class);
+        setupButton(R.id.btnRanking, RankingActivity.class);
+        setupButton(R.id.btnGame, GameActivity.class);
+        setupButton(R.id.btnSettings, SettingsActivity.class);
+    }
 
-        // Set click listeners
-        btnHowToPlay.setOnClickListener(this::howToPlay);
-        btnAbout.setOnClickListener(this::about);
-        btnRanking.setOnClickListener(this::ranking);
-        btnGame.setOnClickListener(this::game);
-        btnSettings.setOnClickListener(this::settings);
+    private void setupButton(int buttonId, Class<?> activityClass) {
+        MaterialButton button = findViewById(buttonId);
+        button.setOnClickListener(v -> startActivity(new Intent(this, activityClass)));
+    }
 
-        // Initialize database
+    private void initializeDatabase() {
         dbHelper = new DatabaseHelper(this);
+        try {
+            dbHelper.getWritableDatabase();
+        } catch (Exception e) {
+            e.printStackTrace();
+            showToast("Error initializing database: " + e.getMessage());
+        }
     }
 
-    // create a Database and table on create the
-
-    // ranking page
-    public void ranking(View view) {
-        Intent intent = new Intent(this, RankingActivity.class);
-        startActivity(intent);
+    private void showToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
-    // game page
-    public void game(View view) {
-        Intent intent = new Intent(this, GameActivity.class);
-        startActivity(intent);
+    private void initializeFirebase() {
+        FirebaseApp.initializeApp(this);
     }
 
-    // settings page
-    public void settings(View view) {
-        Intent intent = new Intent(this, SettingsActivity.class);
-        startActivity(intent);
-    }
-
-    // how to play page
-    public void howToPlay(View view) {
-        Intent intent = new Intent(this, HowToPlay.class);
-        startActivity(intent);
-    }
-
-    // about page
-    public void about(View view) {
-        Intent intent = new Intent(this, AboutActivity.class);
-        startActivity(intent);
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (dbHelper != null) {
+            dbHelper.close();
+        }
     }
 }

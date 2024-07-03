@@ -1,0 +1,133 @@
+<resources>
+    <string name="app_name">數學遊戲</string>
+    <string name="back">返回</string>
+    <string name="first_fragment_label">第一個片段</string>
+    <string name="second_fragment_label">第二個片段</string>
+    <string name="next">下一個</string>
+    <string name="done">完成</string>
+    <string name="previous">上一個</string>
+    <string name="hello_blank_fragment">你好空白片段</string>
+    <string name="start_game">開始遊戲</string>
+    <string name="ranking">排行榜</string>
+    <string name="how_to_play">如何遊玩</string>
+    <string name="settings">設置</string>
+    <string name="about">關於</string>
+    <string name="developer_names">Mythic3011</string>
+    <string name="app_description">這是由Mythic3011開發的Android遊戲。這個遊戲是數學遊戲。</string>
+    <string name="app_logo_description">應用程式標誌</string>
+    <string name="save_success">結果保存成功！</string>
+    <string name="upload_success">結果上傳成功！</string>
+    <string name="loading">加載中…</string>
+    <string name="name_required">請輸入您的名字</string>
+    <string name="result_format">你在%3$d秒內答對了%1$d題，共%2$d題。</string>
+    <string name="how_to_play_title">如何遊玩</string>
+    <string name="import_database">導入數據庫</string>
+    <string name="import_warning">導入數據庫將覆蓋您當前的數據。您確定要繼續嗎？</string>
+    <string name="yes">是</string>
+    <string name="no">否</string>
+    <string name="notifications">通知</string>
+    <string name="sound">聲音</string>
+    <string name="vibration">震動</string>
+    <string name="export_saves">導出存檔</string>
+    <string name="import_saves">導入存檔</string>
+    <string name="notifications_enabled">通知已啟用</string>
+    <string name="notifications_disabled">通知已禁用</string>
+    <string name="sound_enabled">聲音已啟用</string>
+    <string name="sound_disabled">聲音已禁用</string>
+    <string name="vibration_enabled">震動已啟用</string>
+    <string name="vibration_disabled">震動已禁用</string>
+    <string name="database_not_found">未找到數據庫文件</string>
+    <string name="export_success">數據庫導出成功</string>
+    <string name="export_error">導出數據庫時出錯：%1$s</string>
+    <string name="import_success">數據庫導入成功</string>
+    <string name="import_error">導入數據庫時出錯：%1$s</string>
+    <string name="theme">主題</string>
+    <string name="language">語言</string>
+    <string name="theme_title">主題</string>
+    <string name="language_title">語言</string>
+    <string name="notifications_title">啟用通知</string>
+    <string name="sound_title">啟用聲音</string>
+    <string name="vibration_title">啟用震動</string>
+    <string name="export_database_title">導出數據庫</string>
+    <string name="export_database_summary">導出您的遊戲數據</string>
+    <string name="import_database_title">導入數據庫</string>
+    <string name="import_database_summary">導入先前導出的遊戲數據</string>
+
+    <string-array name="theme_entries">
+        <item>系統默認</item>
+        <item>淺色</item>
+        <item>深色</item>
+    </string-array>
+    <string-array name="theme_values">
+        <item>system</item>
+        <item>light</item>
+        <item>dark</item>
+    </string-array>
+    <string-array name="theme_options">
+        <item>系統默認</item>
+        <item>淺色</item>
+        <item>深色</item>
+    </string-array>
+    <string-array name="language_options">
+        <item>英語</item>
+        <item>繁體中文</item>
+        <item>簡體中文</item>
+        <item>日語</item>
+    </string-array>
+    <string-array name="language_values">
+        <item>en</item>
+        <item>zh-TW</item>
+        <item>zh-CN</item>
+        <item>ja</item>
+    </string-array>
+    <string name="game_settings">遊戲設置</string>
+    <string name="appearance_settings">外觀設置</string>
+    <string name="data_management">數據管理</string>
+    <string name="notifications_summary">啟用通知以在遊戲結束時通知您</string>
+    <string name="sound_summary">啟用聲音以在遊戲結束時播放聲音</string>
+    <string name="vibration_summary">啟用震動以在遊戲結束時震動</string>
+
+    <string name="question_number">問題 %1$d/%2$d</string>
+    <string name="question_format">%1$d %2$s %3$d</string>
+    <string name="addition_question">%1$d + %2$d</string>
+    <string name="subtraction_question">%1$d - %2$d</string>
+    <string name="enter_answer">請輸入您的答案</string>
+    <string name="correct">正確！</string>
+    <string name="incorrect">錯誤。正確答案是 %1$d</string>
+    <string name="score">得分：%1$d/%2$d</string>
+    <string name="time_format">%02d:%02d</string>
+    <string name="game_paused">遊戲暫停</string>
+    <string name="continue_game">繼續</string>
+    <string name="end_game">結束遊戲</string>
+    <string name="game_over">遊戲結束</string>
+    <string name="final_score">最終得分：%1$d/%2$d</string>
+    <string name="total_time">總時間：%1$s</string>
+    <string name="enter_your_answer">請輸入您的答案</string>
+
+    <string name="result_message">你在%2$d秒內答對了%1$d題，共10題。</string>
+    <string name="save_result">保存結果</string>
+    <string name="upload_result">上傳結果</string>
+    <string name="back_to_main">返回主菜單</string>
+    <string name="name_hint">輸入您的名字</string>
+    <string name="anonymous">匿名</string>
+    <string name="result_saved">遊戲結果保存成功</string>
+    <string name="result_save_error">保存遊戲結果時出錯</string>
+    <string name="result_uploaded">結果上傳成功</string>
+    <string name="result_upload_error">上傳遊戲結果時出錯</string>
+    <string name="result_title">結果</string>
+    <string name="instruction1">1. 回答10道數學題</string>
+    <string name="instruction2">2. 題目包括 +, -, *, 和 /</string>
+    <string name="instruction3">3. 輸入您的答案並點擊"完成"</string>
+    <string name="instruction4">4. 快速準確地回答以獲得最佳分數！</string>
+
+    <string name="ranking_title">排行榜</string>
+    <string name="game_ranking">遊戲排行榜</string>
+    <string name="your_records">您的記錄</string>
+    <string name="visit_my_github">訪問我的Github</string>
+    <string name="developers">開發者</string>
+    <string name="no_records_found">沒有找到記錄</string>
+    <string name="no_ranking_data">沒有找到排行榜數據</string>
+    <string name="refresh">刷新</string>
+    <string name="refreshing">正在刷新排行榜...</string>
+    <string name="about_message">這是由Mythic3011開發的Android遊戲。</string>
+</resources>

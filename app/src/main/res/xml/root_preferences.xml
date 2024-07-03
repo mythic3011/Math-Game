@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory app:title="@string/appearance_settings">
+        <ListPreference
+            app:key="theme"
+            app:title="@string/theme_title"
+            app:entries="@array/theme_options"
+            app:entryValues="@array/theme_values"
+            app:defaultValue="system"
+            app:useSimpleSummaryProvider="true"/>
+
+        <ListPreference
+            app:key="language"
+            app:title="@string/language_title"
+            app:entries="@array/language_options"
+            app:entryValues="@array/language_values"
+            app:defaultValue="en"
+            app:useSimpleSummaryProvider="true"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/game_settings">
+        <SwitchPreferenceCompat
+            app:key="notifications"
+            app:title="@string/notifications_title"
+            app:summary="@string/notifications_summary"
+            app:defaultValue="true"/>
+
+        <SwitchPreferenceCompat
+            app:key="sound"
+            app:title="@string/sound_title"
+            app:summary="@string/sound_summary"
+            app:defaultValue="true"/>
+
+        <SwitchPreferenceCompat
+            app:key="vibration"
+            app:title="@string/vibration_title"
+            app:summary="@string/vibration_summary"
+            app:defaultValue="true"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/data_management">
+        <Preference
+            app:key="export_database"
+            app:title="@string/export_database_title"
+            app:summary="@string/export_database_summary"/>
+
+        <Preference
+            app:key="import_database"
+            app:title="@string/import_database_title"
+            app:summary="@string/import_database_summary"/>
+    </PreferenceCategory>
+</PreferenceScreen>

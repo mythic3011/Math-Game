@@ -45,12 +45,9 @@ public class GameResult {
     public void setSynced(boolean synced) {
         this.synced = synced;
     }
-
-
     public void setName(String string) {
         this.name = string;
     }
-
     public String getName() {
         return name;
     }

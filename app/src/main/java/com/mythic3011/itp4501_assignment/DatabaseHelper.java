@@ -65,16 +65,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String selectQuery = "SELECT * FROM " + TABLE_GAMES + " ORDER BY " + COLUMN_ID + " DESC";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
+
+        int idIndex = cursor.getColumnIndex(COLUMN_ID);
+        int playDateIndex = cursor.getColumnIndex(COLUMN_PLAY_DATE);
+        int playTimeIndex = cursor.getColumnIndex(COLUMN_PLAY_TIME);
+        int durationIndex = cursor.getColumnIndex(COLUMN_DURATION);
+        int correctCountIndex = cursor.getColumnIndex(COLUMN_CORRECT_COUNT);
+        int syncedIndex = cursor.getColumnIndex(COLUMN_SYNCED);
+        int nameIndex = cursor.getColumnIndex(COLUMN_NAME);
+
         if (cursor.moveToFirst()) {
             do {
                 GameResult gameResult = new GameResult();
-                gameResult.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
-                gameResult.setPlayDate(cursor.getString(cursor.getColumnIndex(COLUMN_PLAY_DATE)));
-                gameResult.setPlayTime(cursor.getString(cursor.getColumnIndex(COLUMN_PLAY_TIME)));
-                gameResult.setDuration(cursor.getInt(cursor.getColumnIndex(COLUMN_DURATION)));
-                gameResult.setCorrectCount(cursor.getInt(cursor.getColumnIndex(COLUMN_CORRECT_COUNT)));
-                gameResult.setSynced(cursor.getInt(cursor.getColumnIndex(COLUMN_SYNCED)) == 1);
-                gameResult.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
+                gameResult.setId(idIndex != -1 ? cursor.getInt(idIndex) : -1);
+                gameResult.setPlayDate(playDateIndex != -1 ? cursor.getString(playDateIndex) : "");
+                gameResult.setPlayTime(playTimeIndex != -1 ? cursor.getString(playTimeIndex) : "");
+                gameResult.setDuration(durationIndex != -1 ? cursor.getInt(durationIndex) : 0);
+                gameResult.setCorrectCount(correctCountIndex != -1 ? cursor.getInt(correctCountIndex) : 0);
+                gameResult.setSynced(syncedIndex != -1 && cursor.getInt(syncedIndex) == 1);
+                gameResult.setName(nameIndex != -1 ? cursor.getString(nameIndex) : "");
                 gameResults.add(gameResult);
             } while (cursor.moveToNext());
         }
@@ -88,15 +97,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String selectQuery = "SELECT * FROM " + TABLE_GAMES + " WHERE " + COLUMN_SYNCED + " = 0";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
+
+        int idIndex = cursor.getColumnIndex(COLUMN_ID);
+        int playDateIndex = cursor.getColumnIndex(COLUMN_PLAY_DATE);
+        int playTimeIndex = cursor.getColumnIndex(COLUMN_PLAY_TIME);
+        int durationIndex = cursor.getColumnIndex(COLUMN_DURATION);
+        int correctCountIndex = cursor.getColumnIndex(COLUMN_CORRECT_COUNT);
+        int nameIndex = cursor.getColumnIndex(COLUMN_NAME);
+
         if (cursor.moveToFirst()) {
             do {
                 GameResult gameResult = new GameResult();
-                gameResult.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
-                gameResult.setPlayDate(cursor.getString(cursor.getColumnIndex(COLUMN_PLAY_DATE)));
-                gameResult.setPlayTime(cursor.getString(cursor.getColumnIndex(COLUMN_PLAY_TIME)));
-                gameResult.setDuration(cursor.getInt(cursor.getColumnIndex(COLUMN_DURATION)));
-                gameResult.setCorrectCount(cursor.getInt(cursor.getColumnIndex(COLUMN_CORRECT_COUNT)));
-                gameResult.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
+                gameResult.setId(idIndex != -1 ? cursor.getInt(idIndex) : -1);
+                gameResult.setPlayDate(playDateIndex != -1 ? cursor.getString(playDateIndex) : "");
+                gameResult.setPlayTime(playTimeIndex != -1 ? cursor.getString(playTimeIndex) : "");
+                gameResult.setDuration(durationIndex != -1 ? cursor.getInt(durationIndex) : 0);
+                gameResult.setCorrectCount(correctCountIndex != -1 ? cursor.getInt(correctCountIndex) : 0);
+                gameResult.setName(nameIndex != -1 ? cursor.getString(nameIndex) : "");
                 gameResults.add(gameResult);
             } while (cursor.moveToNext());
         }

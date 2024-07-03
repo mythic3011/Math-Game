@@ -1,43 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme -->
-    <style name="Theme.MathGame" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
-        <!-- Primary brand color -->
-        <item name="colorPrimary">@color/cloudflare_orange</item>
-        <item name="colorPrimaryVariant">@color/cloudflare_dark_orange</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <!-- Secondary brand color -->
-        <item name="colorSecondary">@color/cloudflare_blue</item>
-        <item name="colorSecondaryVariant">@color/cloudflare_dark_blue</item>
-        <item name="colorOnSecondary">@color/white</item>
-        <!-- Status bar color -->
-        <item name="android:statusBarColor" >?attr/colorPrimaryVariant</item>
+    <style name="Theme.MathGame" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryVariant">@color/primary_variant</item>
+        <item name="colorOnPrimary">@color/on_primary</item>
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorSecondaryVariant">@color/secondary_variant</item>
+        <item name="colorOnSecondary">@color/on_secondary</item>
+        <item name="colorSurface">@color/surface</item>
+        <item name="colorOnSurface">@color/on_surface</item>
+        <item name="android:colorBackground">@color/background</item>
+        <item name="colorOnBackground">@color/on_background</item>
+        <item name="colorError">@color/error</item>
+        <item name="colorOnError">@color/on_error</item>
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="android:navigationBarColor">?attr/colorSurface</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="textInputStyle">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox</item>
+        <item name="editTextStyle">@style/Widget.MaterialComponents.TextInputEditText.OutlinedBox</item>
+        <item name="colorOnSurfaceVariant">@color/colorOnSurfaceVariant</item>
     </style>
-
-    <!-- Light Theme -->
     <style name="Theme.MathGame.Light" parent="Theme.MathGame">
-        <item name="android:windowBackground">@color/light_background</item>
-        <item name="android:textColor">@color/dark_text</item>
-        <item name="android:textColorSecondary">@color/gray_text</item>
-        <item name="buttonStyle">@style/Widget.MathGame.Button.Light</item>
+        <item name="textInputStyle">@style/Widget.MathGame.TextInputLayout</item>
+        <item name="editTextStyle">@style/Widget.MathGame.TextInputEditText</item>
     </style>
 
-    <!-- Dark Theme -->
     <style name="Theme.MathGame.Dark" parent="Theme.MathGame">
-        <item name="android:windowBackground">@color/dark_background</item>
-        <item name="android:textColor">@color/light_text</item>
-        <item name="android:textColorSecondary">@color/light_gray_text</item>
-        <item name="buttonStyle">@style/Widget.MathGame.Button.Dark</item>
+        <item name="textInputStyle">@style/Widget.MathGame.TextInputLayout</item>
+        <item name="editTextStyle">@style/Widget.MathGame.TextInputEditText</item>
+    </style>
+
+    <style name="Widget.MathGame.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">?attr/colorPrimary</item>
+        <item name="hintTextColor">?attr/colorPrimary</item>
+    </style>
+    <style name="Widget.MathGame.TextInputEditText" parent="Widget.MaterialComponents.TextInputEditText.OutlinedBox">
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+    <!-- 16-bit Pixel Theme -->
+    <style name="Theme.MathGame.Pixel" parent="Theme.MathGame">
+        <item name="colorPrimary">@color/pixel_primary</item>
+        <item name="colorOnPrimary">@color/pixel_on_primary</item>
+        <item name="colorAccent">@color/pixel_accent</item>
+        <item name="android:colorBackground">@color/pixel_background</item>
+        <item name="colorOnBackground">@color/pixel_on_background</item>
+        <item name="buttonStyle">@style/Widget.MathGame.Button.Pixel</item>
+    </style>
+
+    <!-- Cloudflare Theme -->
+    <style name="Theme.MathGame.Cloudflare" parent="Theme.MathGame">
+        <item name="colorPrimary">@color/cloudflare_primary</item>
+        <item name="colorOnPrimary">@color/cloudflare_on_primary</item>
+        <item name="colorAccent">@color/cloudflare_accent</item>
+        <item name="android:colorBackground">@color/cloudflare_background</item>
+        <item name="colorOnBackground">@color/cloudflare_on_background</item>
+        <item name="buttonStyle">@style/Widget.MathGame.Button.Cloudflare</item>
+    </style>
+
+    <!-- Cloudflare Dark Theme -->
+    <style name="Theme.MathGame.CloudflareDark" parent="Theme.MathGame.Cloudflare">
+        <item name="colorPrimary">@color/cloudflare_dark_orange</item>
+        <item name="colorOnPrimary">@color/cloudflare_light_text</item>
+        <item name="colorAccent">@color/cloudflare_dark_accent</item>
+        <item name="android:colorBackground">@color/cloudflare_dark_background</item>
+        <item name="colorOnBackground">@color/cloudflare_light_text</item>
+        <item name="buttonStyle">@style/Widget.MathGame.Button.CloudflareDark</item>
+    </style>
+
+    <!-- Tailwind Theme -->
+    <style name="Theme.MathGame.Tailwind" parent="Theme.MathGame">
+        <item name="colorPrimary">@color/tailwind_primary</item>
+        <item name="colorOnPrimary">@color/tailwind_on_primary</item>
+        <item name="colorAccent">@color/tailwind_accent</item>
+        <item name="android:colorBackground">@color/tailwind_background</item>
+        <item name="colorOnBackground">@color/tailwind_on_background</item>
+        <item name="buttonStyle">@style/Widget.MathGame.Button.Tailwind</item>
     </style>
 
     <!-- Button styles -->
-    <style name="Widget.MathGame.Button.Light" parent="Widget.MaterialComponents.Button">
-        <item name="backgroundTint">@color/cloudflare_orange</item>
-        <item name="android:textColor">@color/white</item>
+    <style name="Widget.MathGame.Button" parent="Widget.MaterialComponents.Button">
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="backgroundTint">?attr/colorPrimary</item>
     </style>
 
-    <style name="Widget.MathGame.Button.Dark" parent="Widget.MaterialComponents.Button">
-        <item name="backgroundTint">@color/cloudflare_blue</item>
-        <item name="android:textColor">@color/white</item>
+    <style name="Widget.MathGame.Button.Pixel" parent="Widget.MathGame.Button">
+        <item name="android:textColor">@color/pixel_button_text</item>
+        <item name="backgroundTint">@color/pixel_button_background</item>
+    </style>
+
+    <style name="Widget.MathGame.Button.Cloudflare" parent="Widget.MathGame.Button">
+        <item name="android:textColor">@color/cloudflare_button_text</item>
+        <item name="backgroundTint">@color/cloudflare_button_background</item>
+    </style>
+
+    <style name="Widget.MathGame.Button.CloudflareDark" parent="Widget.MathGame.Button">
+        <item name="android:textColor">@color/cloudflare_dark_button_text</item>
+        <item name="backgroundTint">@color/cloudflare_dark_button_background</item>
+    </style>
+
+    <style name="Widget.MathGame.Button.Tailwind" parent="Widget.MathGame.Button">
+        <item name="android:textColor">@color/tailwind_button_text</item>
+        <item name="backgroundTint">@color/tailwind_button_background</item>
     </style>
 </resources>
