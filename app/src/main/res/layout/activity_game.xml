@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/gameContent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorSurface"
@@ -54,6 +55,8 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
+        android:minHeight="48dp"
+        android:padding="8dp"
         android:hint="@string/enter_your_answer"
         app:boxBackgroundColor="?attr/colorSurface"
         app:boxStrokeColor="?attr/colorPrimary"
@@ -77,6 +80,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/done"
+        android:minWidth="120dp"
+        android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tilAnswer" />
@@ -88,6 +93,8 @@
         android:layout_marginTop="16dp"
         android:text="@string/next"
         android:visibility="invisible"
+        android:minWidth="120dp"
+        android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tilAnswer" />
@@ -121,42 +128,45 @@
         android:id="@+id/pauseOverlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#B3000000"
-        android:visibility="gone">
+        android:background="@color/transparent"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:orientation="vertical"
-            android:background="?attr/colorSurface"
-            android:padding="24dp">
+            android:padding="24dp"
+            android:background="@color/transparent">
 
             <TextView
                 android:id="@+id/tvPauseGame"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/game_paused"
                 android:textColor="?attr/colorOnSurface"
-                android:textSize="24sp" />
+                android:text="@string/game_paused"
+                android:textSize="24sp"
+                android:layout_marginBottom="24dp"/>
 
             <Button
                 android:id="@+id/btnContinue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/continue_game" />
+                android:text="@string/continue_game"
+                android:minHeight="48dp"
+                android:layout_marginBottom="16dp"/>
 
             <Button
                 android:id="@+id/btnEndGame"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/end_game" />
-
+                android:text="@string/end_game"
+                android:minHeight="48dp"/>
         </LinearLayout>
-
     </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,16 +1,19 @@
 package com.mythic3011.itp4501_assignment;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.FirebaseApp;
+
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,11 +23,32 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        applySettings();
 
         setupEdgeToEdgeDisplay();
         initializeButtons();
         initializeDatabase();
         initializeFirebase();
+    }
+
+    private void applySettings() {
+        loadSettings();
+        SharedPreferences prefs = getSharedPreferences("GameSettings", MODE_PRIVATE);
+        AppCompatDelegate.setDefaultNightMode(prefs.getInt("theme", AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM));
+
+        int language = prefs.getInt("language", 0);
+        if (language != 0) {
+            Locale.setDefault(Locale.ENGLISH);
+            Locale.setDefault(Locale.forLanguageTag("en"));
+        }
+    }
+
+    private void loadSettings() {
+        SharedPreferences prefs = getSharedPreferences("GameSettings", MODE_PRIVATE);
+
+        if (prefs.contains("language") && !(prefs.getAll().get("language") instanceof String)) {
+            prefs.edit().remove("language").apply();
+        }
     }
 
     private void setupEdgeToEdgeDisplay() {

@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.cardview.widget.CardView;
 
 import java.util.Locale;
@@ -102,12 +103,15 @@ public class HowToPlay extends AppCompatActivity {
     }
 
     private void applyLanguageSetting() {
-        SharedPreferences sharedPreferences = getSharedPreferences("GameSettings", MODE_PRIVATE);
-        int languagePosition = sharedPreferences.getInt("language", 0);
-        String[] languageCodes = {"en", "zh-TW", "zh-CN", "ja"};
+        SharedPreferences sharedPreferences = getSharedPreferences("GameSettings", MODE_PRIVATE); // TODO: Change to MODE_PRIVATE_MULTI_PROCESS
+        String languageCode = sharedPreferences.getString("language", "en");
+        setLocale(languageCode);
 
-        if (languagePosition < languageCodes.length) {
-            setLocale(languageCodes[languagePosition]);
+        String theme = sharedPreferences.getString("theme", "auto");
+        if (theme.equals("auto")) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
     }
 

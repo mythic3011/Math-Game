@@ -20,24 +20,21 @@
         <item name="textInputStyle">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox</item>
         <item name="editTextStyle">@style/Widget.MaterialComponents.TextInputEditText.OutlinedBox</item>
         <item name="colorOnSurfaceVariant">@color/colorOnSurfaceVariant</item>
+        <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Body1</item>
     </style>
+
+    <!-- Light Theme -->
     <style name="Theme.MathGame.Light" parent="Theme.MathGame">
         <item name="textInputStyle">@style/Widget.MathGame.TextInputLayout</item>
         <item name="editTextStyle">@style/Widget.MathGame.TextInputEditText</item>
     </style>
 
+    <!-- Dark Theme -->
     <style name="Theme.MathGame.Dark" parent="Theme.MathGame">
         <item name="textInputStyle">@style/Widget.MathGame.TextInputLayout</item>
         <item name="editTextStyle">@style/Widget.MathGame.TextInputEditText</item>
     </style>
 
-    <style name="Widget.MathGame.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="boxStrokeColor">?attr/colorPrimary</item>
-        <item name="hintTextColor">?attr/colorPrimary</item>
-    </style>
-    <style name="Widget.MathGame.TextInputEditText" parent="Widget.MaterialComponents.TextInputEditText.OutlinedBox">
-        <item name="android:textColor">?attr/colorOnSurface</item>
-    </style>
     <!-- 16-bit Pixel Theme -->
     <style name="Theme.MathGame.Pixel" parent="Theme.MathGame">
         <item name="colorPrimary">@color/pixel_primary</item>

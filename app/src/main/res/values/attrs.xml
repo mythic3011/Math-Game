@@ -1,3 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <declare-styleable name="MathGameTheme">
+        <attr name="colorGameBackground" format="color" />
+        <attr name="colorGameText" format="color" />
+        <attr name="colorGameAccent" format="color" />
+        <attr name="colorGameButton" format="color" />
+        <attr name="colorGameButtonText" format="color" />
+
+        <attr name="textAppearanceGameTitle" format="reference" />
+        <attr name="textAppearanceGameQuestion" format="reference" />
+        <attr name="textAppearanceGameAnswer" format="reference" />
+        <attr name="textAppearanceGameTimer" format="reference" />
+        <attr name="textAppearanceGameScore" format="reference" />
+
+        <attr name="buttonStyleGame" format="reference" />
+        <attr name="buttonStyleGameDone" format="reference" />
+        <attr name="buttonStyleGameNext" format="reference" />
+        <attr name="editTextStyleGame" format="reference" />
+        <attr name="mathIconViewStyle" format="reference" />
+    </declare-styleable>
+    <declare-styleable name="MathIconView">
+        <attr name="iconColor" format="color" />
+        <attr name="iconSize" format="dimension" />
+        <attr name="rotationSpeed" format="float" />
+    </declare-styleable>
 </resources>

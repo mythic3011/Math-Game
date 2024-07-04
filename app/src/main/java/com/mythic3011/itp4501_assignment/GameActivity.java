@@ -2,11 +2,11 @@ package com.mythic3011.itp4501_assignment;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,6 +14,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.textfield.TextInputLayout;
+import androidx.activity.OnBackPressedCallback;
+import android.os.Looper;
+import android.view.View;
+import android.os.Handler;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -27,7 +31,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 public class GameActivity extends AppCompatActivity {
-
+    private View gameContent;
     private TextView tvQuestionNumber, tvQuestion, tvTimer, tvResult, tvScore;
     private EditText etAnswer;
     private Button btnDone, btnNext;
@@ -39,12 +43,15 @@ public class GameActivity extends AppCompatActivity {
     private static final int MAX_VALUE = 100;
     private static final int MIN_VALUE = 1;
     private static final int TOTAL_QUESTIONS = 10;
+    private static final String[] OPERATORS = {"+", "-", "*", "/"};
+    private final Handler timerHandler = new Handler(Looper.getMainLooper());
+    private Random random = new Random();
+
 
     private int currentQuestion = 0;
     private int correctCount = 0;
     private long startTime;
-    private Handler timerHandler = new Handler();
-    private Random random = new Random();
+
     private DatabaseHelper dbHelper;
     private FirebaseAnalytics mFirebaseAnalytics;
     private boolean isPaused = false;
@@ -60,12 +67,21 @@ public class GameActivity extends AppCompatActivity {
         initializeDatabase();
         initializeFirebaseAnalytics();
         startGame();
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (!isPaused) {
+                    pauseGame();
+                } else {
+                    resumeGame();
+                }
+            }
+        });
     }
 
     private void applySettings() {
         SharedPreferences prefs = getSharedPreferences("GameSettings", MODE_PRIVATE);
 
-        // Clear incorrect value if it exists
         if (prefs.contains("language") && !(prefs.getAll().get("language") instanceof String)) {
             prefs.edit().remove("language").apply();
         }
@@ -87,6 +103,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void initializeViews() {
+        gameContent = findViewById(R.id.gameContent);
         tvQuestionNumber = findViewById(R.id.tvQuestionNumber);
         tvQuestion = findViewById(R.id.tvQuestion);
         tvTimer = findViewById(R.id.tvTimer);
@@ -106,17 +123,14 @@ public class GameActivity extends AppCompatActivity {
         btnDone.setOnClickListener(v -> checkAnswer());
         btnNext.setOnClickListener(v -> animateToNextQuestion());
         btnContinue.setOnClickListener(v -> resumeGame());
-        btnEndGame.setOnClickListener(v -> endGame());
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        if (!isPaused) {
-            pauseGame();
-        } else {
-            resumeGame();
-        }
+        btnEndGame.setOnClickListener(v -> {
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.end_game_confirmation)
+                    .setMessage(R.string.end_game_message)
+                    .setPositiveButton(R.string.yes, (dialog, which) -> endGame())
+                    .setNegativeButton(R.string.no, null)
+                    .show();
+        });
     }
 
     private void startGame() {
@@ -136,9 +150,16 @@ public class GameActivity extends AppCompatActivity {
             return;
         }
 
-        int num1 = random.nextInt(MAX_VALUE - MIN_VALUE + 1) + MIN_VALUE;
-        int num2 = random.nextInt(MAX_VALUE - MIN_VALUE + 1) + MIN_VALUE;
-        String operator = random.nextBoolean() ? "+" : "-";
+        int num1, num2;
+        String operator;
+        int result;
+
+        do {
+            num1 = random.nextInt(MAX_VALUE - MIN_VALUE + 1) + MIN_VALUE;
+            num2 = random.nextInt(MAX_VALUE - MIN_VALUE + 1) + MIN_VALUE;
+            operator = OPERATORS[random.nextInt(OPERATORS.length)];
+            result = calculateResult(num1, num2, operator);
+        } while (!isValidQuestion(num1, num2, operator, result));
 
         tvQuestionNumber.setText(getString(R.string.question_number, currentQuestion, TOTAL_QUESTIONS));
         tvQuestion.setText(getString(R.string.question_format, num1, operator, num2));
@@ -146,6 +167,27 @@ public class GameActivity extends AppCompatActivity {
         tvResult.setVisibility(View.INVISIBLE);
         btnNext.setVisibility(View.INVISIBLE);
         btnDone.setVisibility(View.VISIBLE);
+    }
+
+    private boolean isValidQuestion(int num1, int num2, String operator, int result) {
+        switch (operator) {
+            case "/":
+                return num1 % num2 == 0 && result > 0;
+            case "-":
+                return result >= 0;
+            default:
+                return true;
+        }
+    }
+
+    private int calculateResult(int num1, int num2, String operator) {
+        switch (operator) {
+            case "+": return num1 + num2;
+            case "-": return num1 - num2;
+            case "*": return num1 * num2;
+            case "/": return num1 / num2;
+            default: throw new IllegalArgumentException("Invalid operator: " + operator);
+        }
     }
 
     private void checkAnswer() {
@@ -161,7 +203,7 @@ public class GameActivity extends AppCompatActivity {
         int num2 = Integer.parseInt(parts[2]);
         String operator = parts[1];
 
-        int correctAnswer = operator.equals("+") ? num1 + num2 : num1 - num2;
+        int correctAnswer = calculateResult(num1, num2, operator);
 
         if (answer == correctAnswer) {
             correctCount++;
@@ -228,18 +270,27 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void hidePauseOverlay() {
-        pauseOverlay.animate().alpha(0f).setDuration(300).withEndAction(() -> {
-            pauseOverlay.setVisibility(View.GONE);
-            unblurBackground();
-        });
+        pauseOverlay.animate()
+                .alpha(0f)
+                .setDuration(300)
+                .withEndAction(() -> {
+                    pauseOverlay.setVisibility(View.GONE);
+                    unblurBackground();
+                });
     }
 
     private void blurBackground() {
-
+        gameContent.animate()
+                .alpha(0.3f)
+                .setDuration(300)
+                .start();
     }
 
     private void unblurBackground() {
-
+        gameContent.animate()
+                .alpha(1f)
+                .setDuration(300)
+                .start();
     }
 
     private void logAnalyticsEvent(String eventName) {
@@ -273,7 +324,7 @@ public class GameActivity extends AppCompatActivity {
             element.animate().alpha(0f).setDuration(300);
         }
 
-        new Handler().postDelayed(() -> {
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
             nextQuestion();
             animateQuestionElements();
         }, 300);

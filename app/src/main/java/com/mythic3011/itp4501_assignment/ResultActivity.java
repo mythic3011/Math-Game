@@ -174,6 +174,7 @@ public class ResultActivity extends AppCompatActivity {
 
     private void showLoadingAnimation() {
         if (progressBar == null) {
+            tilName.removeView(progressBar);
             progressBar = new ProgressBar(this, null, android.R.attr.progressBarStyleLarge);
             progressBar.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             progressBar.setIndeterminate(true);

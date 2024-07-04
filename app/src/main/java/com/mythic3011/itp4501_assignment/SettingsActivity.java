@@ -69,7 +69,6 @@ public class SettingsActivity extends AppCompatActivity {
             sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
 
             registerLaunchers();
-            setupThemePreference();
             setupLanguagePreference();
             setupExportPreference();
             setupImportPreference();
@@ -106,12 +105,13 @@ public class SettingsActivity extends AppCompatActivity {
             ListPreference themePreference = findPreference("theme");
             if (themePreference != null) {
                 themePreference.setOnPreferenceChangeListener((preference, newValue) -> {
-                    int theme = Integer.parseInt((String) newValue);
-                    AppCompatDelegate.setDefaultNightMode(theme);
+                    String themeOption = (String) newValue;
+                    updateTheme(themeOption);
                     return true;
                 });
             }
         }
+
 
         private void setupLanguagePreference() {
             ListPreference languagePreference = findPreference("language");
@@ -204,6 +204,7 @@ public class SettingsActivity extends AppCompatActivity {
             }
         }
 
+        // this method is called when the user Toasts the app from the Settings screen
         private void showToast(int messageResId) {
             Toast.makeText(requireContext(), messageResId, Toast.LENGTH_SHORT).show();
         }
@@ -244,47 +245,61 @@ public class SettingsActivity extends AppCompatActivity {
                     break;
             }
         }
+
         private void updateTheme(String theme) {
             int themeResId;
+            int nightMode;
+
             switch (theme) {
                 case "light":
                     themeResId = R.style.Theme_MathGame_Light;
+                    nightMode = AppCompatDelegate.MODE_NIGHT_NO;
                     break;
                 case "dark":
                     themeResId = R.style.Theme_MathGame_Dark;
+                    nightMode = AppCompatDelegate.MODE_NIGHT_YES;
                     break;
                 case "pixel":
                     themeResId = R.style.Theme_MathGame_Pixel;
+                    nightMode = AppCompatDelegate.MODE_NIGHT_NO;
                     break;
                 case "cloudflare":
                     themeResId = R.style.Theme_MathGame_Cloudflare;
+                    nightMode = AppCompatDelegate.MODE_NIGHT_NO;
                     break;
                 case "cloudflare_dark":
                     themeResId = R.style.Theme_MathGame_CloudflareDark;
+                    nightMode = AppCompatDelegate.MODE_NIGHT_YES;
                     break;
                 case "tailwind":
                     themeResId = R.style.Theme_MathGame_Tailwind;
+                    nightMode = AppCompatDelegate.MODE_NIGHT_NO;
+                    break;
+                case "system":
+                    themeResId = R.style.Theme_MathGame;
+                    nightMode = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
                     break;
                 default:
                     themeResId = R.style.Theme_MathGame;
+                    nightMode = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
                     break;
             }
 
-            // Apply the selected theme
+            // Save the selected theme
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("theme", theme);
+            editor.apply();
+
+            // Set the night mode
+            AppCompatDelegate.setDefaultNightMode(nightMode);
+
+            // Apply the theme
             requireActivity().setTheme(themeResId);
 
-            // If the theme is system default, set the appropriate night mode
-            if (theme.equals("system")) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-            } else {
-                // For other themes, we'll use the theme-specific settings
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-            }
-
-            // Recreate the activity to apply the new theme
+            // Recreate the activity
             requireActivity().recreate();
         }
-
         private void updateLanguage(String languageCode) {
             setLocale(languageCode);
             requireActivity().recreate();}

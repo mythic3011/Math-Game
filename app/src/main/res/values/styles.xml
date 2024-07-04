@@ -26,4 +26,13 @@
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">?attr/colorOnSurface</item>
     </style>
+
+
+    <style name="Widget.MathGame.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">?attr/colorPrimary</item>
+        <item name="hintTextColor">?attr/colorPrimary</item>
+    </style>
+    <style name="Widget.MathGame.TextInputEditText" parent="Widget.MaterialComponents.TextInputEditText.OutlinedBox">
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
 </resources>

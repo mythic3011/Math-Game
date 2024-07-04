@@ -134,6 +134,9 @@
     <string name="no_records_found">No records found</string>
     <string name="no_ranking_data">No ranking data found</string>
     <string name="refresh">refresh</string>
-    <string name="refreshing">Refreshing rankings...</string>
+    <string name="refreshing">Refreshing rankings…</string>
     <string name="about_message">This is a Math Game app developed by Mythic3011.</string>
+    <string name="end_game_confirmation">Do you want to end the game?</string>
+    <string name="end_game_message">You will lose all your progress.</string>
+
 </resources>

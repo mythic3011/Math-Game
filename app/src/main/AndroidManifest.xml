@@ -54,7 +54,11 @@
         <activity
             android:name=".SettingsActivity"
             android:exported="false"
-            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden" />
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
 
         <activity
             android:name=".RankingActivity"

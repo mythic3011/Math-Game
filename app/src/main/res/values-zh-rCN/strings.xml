@@ -126,6 +126,8 @@
     <string name="no_records_found">没有找到记录</string>
     <string name="no_ranking_data">没有找到排行榜数据</string>
     <string name="refresh">刷新</string>
-    <string name="refreshing">正在刷新排行榜...</string>
+    <string name="refreshing">正在刷新排行榜…</string>
     <string name="about_message">这是由Mythic3011开发的Android游戏。</string>
+    <string name="end_game_confirmation">您确定要结束游戏吗？</string>
+    <string name="end_game_message">您将丢失所有进度。</string>
 </resources>

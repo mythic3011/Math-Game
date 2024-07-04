@@ -129,6 +129,8 @@
     <string name="no_records_found">レコードが見つかりません</string>
     <string name="no_ranking_data">ランキングデータが見つかりません</string>
     <string name="refresh">更新</string>
-    <string name="refreshing">ランキングを更新中...</string>
+    <string name="refreshing">ランキングを更新中…</string>
     <string name="about_message">これはMythic3011によって開発されたAndroidゲームです。</string>
+    <string name="end_game_confirmation">ゲームを終了しますか？</string>
+    <string name="end_game_message">すべての進捗は失われます。</string>
 </resources>
