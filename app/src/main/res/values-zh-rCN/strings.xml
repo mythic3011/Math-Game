@@ -53,7 +53,6 @@
     <string name="export_database_summary">导出您的游戏数据</string>
     <string name="import_database_title">导入数据库</string>
     <string name="import_database_summary">导入先前导出的游戏数据</string>
-
     <string-array name="theme_entries">
         <item>系统默认</item>
         <item>浅色</item>
@@ -130,4 +129,39 @@
     <string name="about_message">这是由Mythic3011开发的Android游戏。</string>
     <string name="end_game_confirmation">您确定要结束游戏吗？</string>
     <string name="end_game_message">您将丢失所有进度。</string>
+    <string name="ranking_correct">正确：</string>
+    <string name="ranking_time">时间：</string>
+    <string name="result_saved_description">您的结果已保存。</string>
+    <string name="notification_channel_id">NotificationChannelId</string>
+    <string name="notification_channel_name">Notification Channel Name</string>
+    <string name="notification_channel_description">Notification Channel Description</string>
+    <string name="notification_channel_importance">Notification Channel Importance</string>
+    <string name="notification_channel_lockscreen_visibility">Notification Channel Lockscreen Visibility</string>
+    <string name="save_error">保存游戏结果时出错</string>
+    <string name="timer_format">%1$d:%2$02d</string>
+    <string name="game_resumed">游戏已恢复</string>
+    <string name="enter_your_name">请输入您的名字</string>
+    <string name="correct_count">正确：%d</string>
+    <string name="duration">时间：%s</string>
+    <string name="date">日期：%s</string>
+    <string name="total_questions">题目数：%d</string>
+    <string name="guest">游客</string>
+    <string name="error_saving_result">保存结果时出错</string>
+    <string name="upload_result_message">您想要上传您的结果到服务器吗？</string>
+    <string name="game_result">游戏结果</string>
+    <string name="notification_result">您在%2$d题中答对了%1$d题。</string>
+    <string name="channel_name">@string/game_result</string>
+    <string name="channel_description">@string/notification_content</string>
+    <string name="notification_content">您在%2$s內答對了%1$d題！</string>
+    <string name="version_number">版本</string>
+    <string name="developed_by">开发者：%s</string>
+    <string name="unknown">未知</string>
+    <string name="visit_website">访问网站</string>
+    <string name="contact_us">联系我们</string>
+    <string name="share_app">分享应用</string>
+    <string name="app_feedback">数学游戏反馈</string>
+    <string name="share_message">看看这个很酷的应用：%s</string>
+    <string name="share_via">分享方式</string>
+    <string name="no_app_available">没有可用的应用程序执行此操作</string>
+
 </resources>

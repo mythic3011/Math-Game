@@ -86,7 +86,6 @@
     <string name="notifications_summary">ゲーム終了時に通知を送信する</string>
     <string name="sound_summary">ゲーム終了時にサウンドを再生する</string>
     <string name="vibration_summary">ゲーム終了時に振動する</string>
-
     <string name="question_number">問題 %1$d/%2$d</string>
     <string name="question_format">%1$d %2$s %3$d</string>
     <string name="addition_question">%1$d + %2$d</string>
@@ -103,7 +102,6 @@
     <string name="final_score">最終スコア：%1$d/%2$d</string>
     <string name="total_time">合計時間：%1$s</string>
     <string name="enter_your_answer">答えを入力してください</string>
-
     <string name="result_message">%2$d秒で10問中%1$d問正解しました。</string>
     <string name="save_result">結果を保存</string>
     <string name="upload_result">結果をアップロード</string>
@@ -119,11 +117,9 @@
     <string name="instruction2">2. 問題には +, -, *, / が含まれます</string>
     <string name="instruction3">3. 答えを入力して「完了」をタップ</string>
     <string name="instruction4">4. 速く正確に答えて最高スコアを目指そう！</string>
-
     <string name="ranking_title">ランキング</string>
     <string name="game_ranking">ゲームランキング</string>
     <string name="your_records">あなたのレコード</string>
-
     <string name="visit_my_github">My Githubに行く</string>
     <string name="developers">開発者</string>
     <string name="no_records_found">レコードが見つかりません</string>
@@ -133,4 +129,38 @@
     <string name="about_message">これはMythic3011によって開発されたAndroidゲームです。</string>
     <string name="end_game_confirmation">ゲームを終了しますか？</string>
     <string name="end_game_message">すべての進捗は失われます。</string>
+    <string name="ranking_correct">正解：</string>
+    <string name="ranking_time">時間：</string>
+    <string name="result_saved_description">あなたの結果が保存されました。</string>
+    <string name="notification_channel_id">NotificationChannelId</string>
+    <string name="notification_channel_name">通知チャンネル名</string>
+    <string name="notification_channel_description">通知チャンネルの説明</string>
+    <string name="notification_channel_importance">通知チャンネルの重要度</string>
+    <string name="notification_channel_lockscreen_visibility">通知チャンネルのロッ</string>
+    <string name="timer_format">%1$d:%2$02d</string>
+    <string name="game_resumed">ゲーム再開</string>
+    <string name="correct_count">正解：%d</string>
+    <string name="total_questions">問題数：%d</string>
+    <string name="error_saving_result">ゲーム結果の保存中にエラーが発生しました</string>
+    <string name="upload_result_message">サーバーに結果をアップロードしますか？</string>
+    <string name="notification_result">%2$d問中%1$d問正解しました。</string>
+    <string name="game_result">ゲーム結果</string>
+    <string name="duration">所要時間: %s</string>
+    <string name="date">日付: %s</string>
+    <string name="enter_your_name">名前を入力してください</string>
+    <string name="guest">ゲスト</string>
+    <string name="save_error">結果の保存中にエラーが発生しました。もう一度お試しください。</string>
+    <string name="channel_name">ゲーム結果</string>
+    <string name="channel_description">ゲーム結果の通知</string>
+    <string name="notification_content">%2$sで%1$d問正解しました！</string>
+    <string name="version_number">バージョン</string>
+    <string name="developed_by">開発者: %s</string>
+    <string name="unknown">不明</string>
+    <string name="visit_website">ウェブサイトを訪問</string>
+    <string name="contact_us">お問い合わせ</string>
+    <string name="share_app">アプリを共有</string>
+    <string name="app_feedback">數學ゲームへのフィードバック</string>
+    <string name="share_message">このクールなアプリをチェックしてください: %s</string>
+    <string name="share_via">共有方法</string>
+    <string name="no_app_available">この操作を実行できるアプリケーションがありません</string>
 </resources>
