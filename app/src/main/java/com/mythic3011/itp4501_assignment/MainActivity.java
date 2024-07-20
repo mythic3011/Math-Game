@@ -2,6 +2,7 @@ package com.mythic3011.itp4501_assignment;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -9,9 +10,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.FirebaseApp;
+import com.mythic3011.itp4501_assignment.Class.DatabaseHelper;
 
 import java.util.Locale;
 
@@ -23,6 +26,7 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
 
     private DatabaseHelper dbHelper; // Helper object for database operations
+    private MediaPlayer mediaPlayer; // Media player for playing background music
 
     /**
      * Called when the activity is starting.
@@ -36,12 +40,30 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         applySettings(); // Apply user-defined settings such as theme and language
-
         setupEdgeToEdgeDisplay(); // Setup UI to display in edge-to-edge mode
         initializeButtons(); // Initialize navigation buttons
         initializeDatabase(); // Initialize SQLite database
         initializeFirebase(); // Initialize Firebase
+        playGameMusic(); // Play background music for the game
     }
+
+    private void playGameMusic() {
+        if (isAudioEnabled()) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.song_main);
+            mediaPlayer.setLooping(true);
+            mediaPlayer.start();
+        }
+    }
+
+    // nav to other page stop game music
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+        }
+    }
+
 
     /**
      * Applies user-defined settings such as theme and language.
@@ -65,11 +87,21 @@ public class MainActivity extends AppCompatActivity {
      */
     private void loadSettings() {
         SharedPreferences prefs = getSharedPreferences("GameSettings", MODE_PRIVATE);
-
         // Check and remove invalid "language" setting
         if (prefs.contains("language") && !(prefs.getAll().get("language") instanceof String)) {
             prefs.edit().remove("language").apply();
         }
+    }
+
+    /**
+     * Checks if audio feedback is enabled in the preferences.
+     * This method retrieves the audio setting from the shared preferences and returns its value.
+     *
+     * @return True if audio is enabled, false otherwise.
+     */
+    private boolean isAudioEnabled() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        return prefs.getBoolean("audio_enabled", true);
     }
 
     /**
@@ -156,6 +188,9 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         if (dbHelper != null) {
             dbHelper.close();
+        }
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
         }
     }
 }

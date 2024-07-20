@@ -1,9 +1,12 @@
 package com.mythic3011.itp4501_assignment;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.service.notification.NotificationListenerService;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -14,6 +17,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -31,6 +35,8 @@ public class RankingActivity extends AppCompatActivity {
     private ViewPager2 viewPager;
     private OnBackPressedCallback backPressedCallback;
 
+    private MediaPlayer music;
+
     /**
      * Sets up the activity's layout, toolbar, ViewPager for tabs, and back pressed callback on creation.
      *
@@ -42,11 +48,84 @@ public class RankingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ranking);
-
+        applySettings();
         setupToolbar();
         setupViewPager();
         setupTabLayout();
         setupBackPressedCallback();
+        playRankingMusic();
+    }
+
+    private void applySettings() {
+        SharedPreferences prefs = getSharedPreferences("GameSettings", MODE_PRIVATE);
+    }
+
+    private void playRankingMusic() {
+        if (isAudioEnabled()) {
+            music = MediaPlayer.create(this, R.raw.song_ranking);
+            music.setLooping(true);
+            music.start();
+        }
+    }
+
+    /**
+     * Checks if vibration feedback is enabled in the preferences.
+     * This method retrieves the vibration setting from the shared preferences and returns its value.
+     *
+     * @return True if vibration is enabled, false otherwise.
+     */
+    private boolean isVibrationEnabled() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        return prefs.getBoolean("vibration_enabled", true);
+    }
+
+    /**
+     * Checks if audio feedback is enabled in the preferences.
+     * This method retrieves the audio setting from the shared preferences and returns its value.
+     *
+     * @return True if audio is enabled, false otherwise.
+     */
+    private boolean isAudioEnabled() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        return prefs.getBoolean("audio_enabled", true);
+    }
+
+    /**
+     * Checks if notifications are enabled in the preferences.
+     * This method retrieves the notification setting from the shared preferences and returns its value.
+     *
+     * @return True if notifications are enabled, false otherwise.
+     */
+    private boolean isNotificationEnabled() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        return prefs.getBoolean("notification_enabled", true);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Resume playing the background music if it has been initialized.
+        if (music != null) {
+            music.start();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        // Pause the background music to conserve resources when the activity is not in the foreground.
+        if (music != null) {
+            music.pause();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // Release the MediaPlayer resource when the activity is destroyed to prevent memory leaks.
+        if (music != null) {
+            music.release();
+        }
     }
 
     /**

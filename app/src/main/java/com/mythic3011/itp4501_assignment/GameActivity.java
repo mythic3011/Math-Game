@@ -14,13 +14,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -66,8 +66,6 @@ public class GameActivity extends AppCompatActivity {
     private MediaPlayer mediaPlayer;
     private MediaPlayer music;
     private boolean isPaused = false;
-    private boolean isSoundEnabled;
-    private boolean isVibrationEnabled;
     private int currentQuestion = 0;
     private int correctCount = 0;
     private long startTime;
@@ -108,9 +106,6 @@ public class GameActivity extends AppCompatActivity {
         Locale.setDefault(currentLocale);
         int theme = prefs.getInt(THEME_KEY, AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         AppCompatDelegate.setDefaultNightMode(theme);
-
-        isSoundEnabled = prefs.getBoolean(SOUND_KEY, true);
-        isVibrationEnabled = prefs.getBoolean(VIBRATION_KEY, true);
     }
 
     /**
@@ -173,8 +168,11 @@ public class GameActivity extends AppCompatActivity {
      * This method should contain logic to initialize and play music.
      */
     private void playGameMusic() {
-        if (isSoundEnabled) {
-            // Implementation should go here
+        if (isAudioEnabled()) {
+            music = MediaPlayer.create(this, R.raw.song_game);
+            music.setVolume(0.3f, 0.3f);
+            music.setLooping(true);
+            music.start();
         }
     }
 
@@ -195,11 +193,22 @@ public class GameActivity extends AppCompatActivity {
      * This method checks if sound is enabled to play the game start sound; otherwise, it checks if vibration is enabled to trigger a vibration.
      */
     private void playGameStartSound() {
-        if (isSoundEnabled) {
+        if (isAudioEnabled()) {
             playSound(R.raw.sound_game_start);
-        } else if (isVibrationEnabled) {
+        } else if (isVibrationEnabled()) {
             vibrate(VIBRATION_DURATION);
         }
+    }
+
+    /**
+     * Checks if vibration feedback is enabled in the preferences.
+     * This method retrieves the vibration setting from the shared preferences and returns its value.
+     *
+     * @return True if vibration is enabled, false otherwise.
+     */
+    private boolean isVibrationEnabled() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        return prefs.getBoolean("vibration_enabled", true);
     }
 
     /**
@@ -228,9 +237,11 @@ public class GameActivity extends AppCompatActivity {
      * @param duration The duration in milliseconds for which the device should vibrate.
      */
     private void vibrate(long duration) {
-        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        if (vibrator != null) {
-            vibrator.vibrate(duration);
+        if (isVibrationEnabled()) {
+            Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+            if (vibrator != null) {
+                vibrator.vibrate(duration);
+            }
         }
     }
 
@@ -265,8 +276,11 @@ public class GameActivity extends AppCompatActivity {
         etAnswer.setText(""); // Clear any previous answer.
         tvResult.setVisibility(View.INVISIBLE); // Hide the result view.
         btnNext.setVisibility(View.INVISIBLE); // Hide the "Next" button until the answer is checked.
-        btnDone.setVisibility(View.VISIBLE); // Show the "Done" button for the user to submit their answer.
+        pauseTimer();
+        // Show the "Done" button for the user to submit their answer. and if Done button is not clicked, it will be stop the timer
+        btnDone.setVisibility(View.VISIBLE);
         playQuestionSound(); // Play the sound effect for moving to the next question.
+        resumeTimer();
     }
 
     /**
@@ -274,9 +288,9 @@ public class GameActivity extends AppCompatActivity {
      * This method checks the game settings for sound and vibration preferences and acts accordingly.
      */
     private void playQuestionSound() {
-        if (isSoundEnabled) {
+        if (isAudioEnabled()) {
             playSound(R.raw.sound_game_next_question);
-        } else if (isVibrationEnabled) {
+        } else if (isVibrationEnabled()) {
             vibrate(VIBRATION_DURATION);
         }
     }
@@ -364,13 +378,41 @@ public class GameActivity extends AppCompatActivity {
     }
 
     /**
+     * Pauses the game timer by removing all callbacks and messages for the timer handler.
+     * This method is used to stop the timer when the game is paused or when moving to the next question.
+     */
+    private void pauseTimer() {
+        timerHandler.removeCallbacksAndMessages(null);
+    }
+
+    /**
+     * Resumes the game timer by posting a delayed runnable task that updates the timer display.
+     * The method calculates the elapsed time since the game started and updates the timer TextView every second.
+     * It checks if the game is not paused before updating the timer to ensure the timer only runs during active game play.
+     */
+    private void resumeTimer() {
+        timerHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (!isPaused) {
+                    long elapsedTime = System.currentTimeMillis() - startTime;
+                    SimpleDateFormat sdf = new SimpleDateFormat("mm:ss", Locale.getDefault());
+                    tvTimer.setText(sdf.format(new Date(elapsedTime)));
+                    timerHandler.postDelayed(this, TIMER_INTERVAL);
+                }
+            }
+        }, TIMER_INTERVAL);
+    }
+
+
+    /**
      * Plays a sound indicating the user has answered correctly, if sound is enabled.
      * If sound is disabled but vibration is enabled, it triggers a vibration instead.
      */
     private void playCorrectSound() {
-        if (isSoundEnabled) {
+        if (isAudioEnabled()) {
             playSound(R.raw.sound_game_correct);
-        } else if (isVibrationEnabled) {
+        } else if (isVibrationEnabled()) {
             vibrate(VIBRATION_DURATION);
         }
     }
@@ -380,9 +422,9 @@ public class GameActivity extends AppCompatActivity {
      * If sound is disabled but vibration is enabled, it triggers a vibration instead.
      */
     private void playWrongSound() {
-        if (isSoundEnabled) {
+        if (isAudioEnabled()) {
             playSound(R.raw.sound_game_wrong);
-        } else if (isVibrationEnabled) {
+        } else if (isVibrationEnabled()) {
             vibrate(VIBRATION_DURATION);
         }
     }
@@ -395,6 +437,7 @@ public class GameActivity extends AppCompatActivity {
      * @param message The result message to be displayed.
      */
     private void showResultWithAnimation(String message) {
+        pauseTimer();
         tvResult.setText(message);
         tvResult.setVisibility(View.VISIBLE);
         ObjectAnimator fadeIn = ObjectAnimator.ofFloat(tvResult, "alpha", 0f, 1f);
@@ -404,6 +447,7 @@ public class GameActivity extends AppCompatActivity {
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playSequentially(fadeIn, fadeOut);
         animatorSet.start();
+        resumeTimer();
     }
 
     /**
@@ -451,9 +495,10 @@ public class GameActivity extends AppCompatActivity {
      * If sound is enabled, it plays the pause sound. If sound is disabled but vibration is enabled, it triggers a vibration.
      */
     private void playPauseSound() {
-        if (isSoundEnabled) {
+        if (isAudioEnabled()) {
             //playSound(R.raw.sound_game_pause);
-        } else if (isVibrationEnabled) {
+            music.pause();
+        } else if (isVibrationEnabled()) {
             vibrate(VIBRATION_DURATION);
         }
     }
@@ -476,9 +521,10 @@ public class GameActivity extends AppCompatActivity {
      * If sound is enabled, it plays the resume sound. If sound is disabled but vibration is enabled, it triggers a vibration.
      */
     private void playResumeSound() {
-        if (isSoundEnabled) {
+        if (isAudioEnabled()) {
             //playSound(R.raw.sound_game_resume);
-        } else if (isVibrationEnabled) {
+            music.start();
+        } else if (isVibrationEnabled()) {
             vibrate(VIBRATION_DURATION);
         }
     }
@@ -529,7 +575,6 @@ public class GameActivity extends AppCompatActivity {
      * and animates the question elements. If there are no more questions, it ends the game.
      */
     private void animateToNextQuestion() {
-        currentQuestion++;
         if (currentQuestion > TOTAL_QUESTIONS) {
             endGame();
         } else {
@@ -547,5 +592,28 @@ public class GameActivity extends AppCompatActivity {
         ObjectAnimator fadeIn = ObjectAnimator.ofFloat(tvQuestion, "alpha", 0f, 1f);
         fadeIn.setDuration(500);
         fadeIn.start();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+        }
+
+        if (music != null) {
+            music.release();
+        }
+    }
+
+    /**
+     * Checks if audio feedback is enabled in the preferences.
+     * This method retrieves the audio setting from the shared preferences and returns its value.
+     *
+     * @return True if audio is enabled, false otherwise.
+     */
+    private boolean isAudioEnabled() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        return prefs.getBoolean("audio_enabled", true);
     }
 }

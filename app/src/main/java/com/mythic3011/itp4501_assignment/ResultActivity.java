@@ -20,6 +20,7 @@ import androidx.preference.PreferenceManager;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.mythic3011.itp4501_assignment.Class.DatabaseHelper;
 import com.mythic3011.itp4501_assignment.databinding.ActivityResultBinding;
 
 import java.text.SimpleDateFormat;
@@ -43,6 +44,8 @@ public class ResultActivity extends AppCompatActivity {
     private DatabaseHelper dbHelper;
     // MediaPlayer for playing success sounds.
     private MediaPlayer mediaPlayer;
+    // MediaPlayer for playing music
+    private MediaPlayer music;
     // Vibrator for providing haptic feedback.
     private Vibrator vibrator;
     // The count of correct answers in the game.
@@ -51,6 +54,7 @@ public class ResultActivity extends AppCompatActivity {
     private long duration;
     // Date and time when the game was played.
     private String date;
+
 
     /**
      * Called when the activity is first created.
@@ -74,6 +78,47 @@ public class ResultActivity extends AppCompatActivity {
         displayGameResult();
         setupSaveButton();
         createNotificationChannel();
+        playResultMusic();
+    }
+
+
+    /**
+     * Plays the result music if audio is enabled in the settings.
+     * This method checks if audio feedback is enabled through {@link #isAudioEnabled()}.
+     * If enabled, it initializes the MediaPlayer with the game end song, sets it to loop, and starts playback.
+     */
+    private void playResultMusic() {
+        if (isAudioEnabled()) {
+            music = MediaPlayer.create(this, R.raw.song_game_end);
+            music.setLooping(true);
+            music.start();
+        }
+    }
+
+    /**
+     * Resumes music playback when the activity resumes.
+     * This method is called as part of the activity lifecycle when the activity enters the Resumed state.
+     * It checks if the music MediaPlayer is not null and starts the music if it was previously paused or stopped.
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (music != null) {
+            music.start();
+        }
+    }
+
+    /**
+     * Releases the music MediaPlayer resource when the activity is paused.
+     * This method is called as part of the activity lifecycle when the activity enters the Paused state.
+     * It releases the MediaPlayer resource to avoid memory leaks and to ensure the music is properly stopped.
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (music != null) {
+            music.release();
+        }
     }
 
     /**

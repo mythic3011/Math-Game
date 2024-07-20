@@ -19,6 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.mythic3011.itp4501_assignment.Class.DatabaseHelper;
+import com.mythic3011.itp4501_assignment.Class.GameResult;
 
 import java.util.ArrayList;
 import java.util.List;

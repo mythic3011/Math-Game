@@ -3,8 +3,10 @@ package com.mythic3011.itp4501_assignment;
 import static com.mythic3011.itp4501_assignment.R.string.developer_names;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -12,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -20,21 +23,59 @@ import com.mythic3011.itp4501_assignment.databinding.ActivityAboutBinding;
 /**
  * AboutActivity provides a user interface that displays information about the application,
  * including the version, developer(s), and options to contact or share the app.
+ * This activity initializes the UI components, sets up the action bar, displays app information,
+ * and handles background music playback based on user preferences.
  */
 public class AboutActivity extends AppCompatActivity {
 
-    private ActivityAboutBinding binding;
-    private FirebaseAnalytics mFirebaseAnalytics;
+    private ActivityAboutBinding binding; // Binding instance for accessing the views.
+    private FirebaseAnalytics mFirebaseAnalytics; // Instance of FirebaseAnalytics for event logging.
+    private MediaPlayer music; // MediaPlayer for playing background music.
 
+    /**
+     * Called when the activity is starting. This is where most initialization should go:
+     * calling setContentView(int) to inflate the activity's UI, using findViewById(int)
+     * to programmatically interact with widgets in the UI, calling managedQuery(Uri, String[], String, String[], String)
+     * to retrieve cursors for data being displayed, etc.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down then this Bundle
+     *                           contains the data it most recently supplied in onSaveInstanceState(Bundle).
+     *                           Note: Otherwise it is null.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityAboutBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-        initializeFirebaseAnalytics();
-        setupActionBar();
-        displayAppInfo();
-        setupButtons();
+        binding = ActivityAboutBinding.inflate(getLayoutInflater()); // Inflate the layout for this activity.
+        setContentView(binding.getRoot()); // Set the content view to the inflated layout.
+        initializeFirebaseAnalytics(); // Initialize Firebase Analytics for event logging.
+        setupActionBar(); // Setup the action bar with a back button and title.
+        displayAppInfo(); // Display the application's version, description, and developer information.
+        setupButtons(); // Setup buttons for visiting the website, contacting support, and sharing the app.
+        playGameMusic(); // Play the game's background music if the audio setting is enabled.
+    }
+
+    /**
+     * Plays the game's background music if sound is enabled.
+     * This method should contain logic to initialize and play music.
+     */
+    private void playGameMusic() {
+        if (isAudioEnabled()) {
+            music = MediaPlayer.create(this, R.raw.song_about);
+            music.setVolume(0.3f, 0.3f);
+            music.setLooping(true);
+            music.start();
+        }
+    }
+
+    /**
+     * Checks if audio feedback is enabled in the preferences.
+     * This method retrieves the audio setting from the shared preferences and returns its value.
+     *
+     * @return True if audio is enabled, false otherwise.
+     */
+    private boolean isAudioEnabled() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        return prefs.getBoolean("audio_enabled", true);
     }
 
     /**
@@ -183,5 +224,45 @@ public class AboutActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
         bundle.putString("event_name", eventName);
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+    }
+
+    /**
+     * Cleans up resources when the activity is destroyed.
+     * This method releases the MediaPlayer resource if it is not null and closes the database helper.
+     * It is called automatically when the activity is being destroyed.
+     */
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (music != null) {
+            music.release();
+            music = null;
+        }
+    }
+
+    /**
+     * Releases the music MediaPlayer resource when the activity is paused.
+     * This method is called as part of the activity lifecycle when the activity enters the Paused state.
+     * It releases the MediaPlayer resource to avoid memory leaks and to ensure the music is properly stopped.
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (music != null) {
+            music.release();
+        }
+    }
+
+    /**
+     * Resumes music playback when the activity resumes.
+     * This method is called as part of the activity lifecycle when the activity enters the Resumed state.
+     * It checks if the music MediaPlayer is not null and starts the music if it was previously paused or stopped.
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (music != null) {
+            music.start();
+        }
     }
 }

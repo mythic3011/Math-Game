@@ -117,7 +117,6 @@ public class SettingsActivity extends AppCompatActivity {
          * The `exportLauncher` is used to start an activity for result and handle the result by exporting the database if the result code is `Activity.RESULT_OK`.
          * The `importLauncher` is used to start an activity for result and handle the result by importing the database if the result code is `Activity.RESULT_OK`.
          *
-         * @return void
          */
         private void registerLaunchers() {
             exportLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
