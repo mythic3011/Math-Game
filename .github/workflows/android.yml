@@ -9,65 +9,50 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    # environment: production  # 先註解掉，需先到 repo settings > Environments 建立同名環境
+    timeout-minutes: 20  # 新增超时限制
 
     steps:
-    - uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-    - name: Set up JDK 17
-      uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-        cache: gradle
-        check-latest: true
+      - name: Setup JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17  # 修正：数字不加引号
+          distribution: temurin
+          cache: gradle
+          check-latest: true
 
-    - name: Validate environment  # 新增環境驗證步驟
-      run: |
-        java -version
-        echo "JAVA_HOME: $JAVA_HOME"
+      - name: Validate environment
+        run: |
+          java -version
+          ./gradlew --version
 
-    - name: Grant execute permission
-      run: chmod +x gradlew
+      - name: Build APK
+        run: ./gradlew assembleRelease --stacktrace --info --no-daemon
 
-    - name: Build with Gradle
-      run: ./gradlew assembleRelease --stacktrace --info
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-apk
+          path: |
+            app/build/outputs/apk/release/*.apk
+            app/build/outputs/mapping/release/mapping.txt
+          if-no-files-found: error
+          retention-days: 3
 
-    - name: Upload APK Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: release-apk
-        path: app/build/outputs/apk/release/app-release-*.apk  # 更精確的 wildcard 匹配
-        if-no-files-found: error  # 找不到檔案時直接報錯
-
-    - name: Create Release
-      id: create_release
-      uses: softprops/action-gh-release@v2  # 升級到 v2 版
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # 改回預設 token
-      with:
-        tag_name: v1.0.0
-        name: Production Release
-        draft: false
-        prerelease: false
-        files: |
-          app/build/outputs/apk/release/app-release-*.apk
-     env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: v1.0.0
-        release_name: Release v1.0.0
-        draft: false
-        prerelease: false
-
-    - name: Upload APK to Release
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: app/build/outputs/apk/release/app-release.apk
-        asset_name: app-release.apk
-        asset_content_type: application/vnd.android.package-archive
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: "v1.0.0"  # 字符串需加引号
+          name: "Production Release"
+          draft: false
+          prerelease: false
+          generate_release_notes: true  # 新增自动生成 Release Note
+          files: |
+            app/build/outputs/apk/release/*.apk
+            app/build/outputs/mapping/release/mapping.txt
